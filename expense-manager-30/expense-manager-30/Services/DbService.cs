@@ -178,8 +178,7 @@ public class DbService
             }
         }
     }
-
-    // Získání transakcí podle uživatele
+    
     public List<Transaction> GetTransactions(int userId)
     {
         var transactions = new List<Transaction>();
@@ -254,8 +253,7 @@ public class DbService
             connection.Open();
 
             string query = "SELECT * FROM Transactions WHERE UserId = @UserId";
-
-            // Přidání podmínek pro filtraci
+            
             if (categoryId.HasValue)
                 query += " AND CategoryId = @CategoryId";
 
