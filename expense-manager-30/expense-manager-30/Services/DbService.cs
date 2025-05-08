@@ -128,9 +128,14 @@ public class DbService
                         var storedHash = reader.GetString(0);
                         var storedSalt = reader.GetString(1);
 
-                        var (passwordHash, _) = HashPassword(password + storedSalt);
+                        // Použít stejný způsob hashování jako při registraci
+                        using (var sha256 = SHA256.Create())
+                        {
+                            var saltedPassword = storedSalt + password;
+                            var passwordHash = Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(saltedPassword)));
 
-                        return storedHash == passwordHash;
+                            return storedHash == passwordHash;
+                        }
                     }
                 }
             }
