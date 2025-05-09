@@ -246,64 +246,89 @@ public class DbService
                 }
             }
         }
+
         return categories;
     }
-    
-    public List<Transaction> GetFilteredTransactions(int userId, int? categoryId = null, DateTime? startDate = null, DateTime? endDate = null)
-    {
-        var transactions = new List<Transaction>();
 
-        using (var connection = new SQLiteConnection($"Data Source={DbFilePath};"))
+    public List<Transaction> GetFilteredTransactions(
+            int userId,
+            int? categoryId = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            bool? isIncomeOnly = null,
+            string? noteContains = null)
         {
-            connection.Open();
+            var transactions = new List<Transaction>();
 
-            string query = "SELECT * FROM Transactions WHERE UserId = @UserId";
-            
-            if (categoryId.HasValue)
-                query += " AND CategoryId = @CategoryId";
-
-            if (startDate.HasValue)
-                query += " AND Date >= @StartDate";
-
-            if (endDate.HasValue)
-                query += " AND Date <= @EndDate";
-
-            using (var command = new SQLiteCommand(query, connection))
+            using (var connection = new SQLiteConnection($"Data Source={DbFilePath};"))
             {
-                command.Parameters.AddWithValue("@UserId", userId);
+                connection.Open();
+
+                var query = "SELECT * FROM Transactions WHERE UserId = @UserId";
+                var parameters = new List<SQLiteParameter>
+                {
+                    new SQLiteParameter("@UserId", userId)
+                };
 
                 if (categoryId.HasValue)
-                    command.Parameters.AddWithValue("@CategoryId", categoryId.Value);
+                {
+                    query += " AND CategoryId = @CategoryId";
+                    parameters.Add(new SQLiteParameter("@CategoryId", categoryId.Value));
+                }
 
                 if (startDate.HasValue)
-                    command.Parameters.AddWithValue("@StartDate", startDate.Value.ToString("yyyy-MM-dd"));
+                {
+                    query += " AND Date >= @StartDate";
+                    parameters.Add(new SQLiteParameter("@StartDate", startDate.Value.ToString("yyyy-MM-dd")));
+                }
 
                 if (endDate.HasValue)
-                    command.Parameters.AddWithValue("@EndDate", endDate.Value.ToString("yyyy-MM-dd"));
-
-                using (var reader = command.ExecuteReader())
                 {
-                    while (reader.Read())
+                    query += " AND Date <= @EndDate";
+                    parameters.Add(new SQLiteParameter("@EndDate", endDate.Value.ToString("yyyy-MM-dd")));
+                }
+
+                if (isIncomeOnly.HasValue)
+                {
+                    query += " AND IsIncome = @IsIncome";
+                    parameters.Add(new SQLiteParameter("@IsIncome", isIncomeOnly.Value ? 1 : 0));
+                }
+
+                if (!string.IsNullOrWhiteSpace(noteContains))
+                {
+                    query += " AND Note LIKE @Note";
+                    parameters.Add(new SQLiteParameter("@Note", $"%{noteContains}%"));
+                }
+
+                using (var command = new SQLiteCommand(query, connection))
+                {
+                    command.Parameters.AddRange(parameters.ToArray());
+
+                    using (var reader = command.ExecuteReader())
                     {
-                        transactions.Add(new Transaction
+                        while (reader.Read())
                         {
-                            Id = reader.GetInt32(0),
-                            Amount = reader.GetDecimal(1),
-                            IsIncome = reader.GetInt32(2) == 1,
-                            Date = DateTime.Parse(reader.GetString(3)),
-                            Note = reader.IsDBNull(4) ? null : reader.GetString(4),
-                            CategoryId = reader.GetInt32(5),
-                            UserId = reader.GetInt32(6)
-                        });
+                            transactions.Add(new Transaction
+                            {
+                                Id = reader.GetInt32(0),
+                                Amount = reader.GetDecimal(1),
+                                IsIncome = reader.GetInt32(2) == 1,
+                                Date = DateTime.Parse(reader.GetString(3)),
+                                Note = reader.IsDBNull(4) ? null : reader.GetString(4),
+                                CategoryId = reader.GetInt32(5),
+                                UserId = reader.GetInt32(6)
+                            });
+                        }
                     }
                 }
             }
+
+            return transactions;
         }
 
-        return transactions;
-    }
-    
-    public (decimal totalIncome, decimal totalExpenses) GetBalance(int userId)
+
+
+        public (decimal totalIncome, decimal totalExpenses) GetBalance(int userId)
     {
         decimal totalIncome = 0;
         decimal totalExpenses = 0;

@@ -3,25 +3,53 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:expense_manager_30.ViewModels"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="expense_manager_30.Views.TransactionListView"
              x:DataType="vm:TransactionListViewModel">
 
 
-    <StackPanel Margin="20" Spacing="10">
-        <TextBlock Text="All Transactions" FontSize="20" FontWeight="Bold"/>
-        <TextBlock Text="{Binding StatusMessage}" Foreground="Green"/>
+<StackPanel Margin="20" Spacing="10">
+    <TextBlock Text="All Transactions" FontSize="20" FontWeight="Bold"/>
+    <StackPanel Orientation="Horizontal" Spacing="10">
+        <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedFilterCategory}" Width="150"/>
 
-        <DataGrid ItemsSource="{Binding Transactions}" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding FormattedDate}" Width="*"/>
-                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="*"/>
-                <DataGridCheckBoxColumn Header="Income" Binding="{Binding IsIncome}" Width="*"/>
-                <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="150"/>
-                <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <!-- ComboBox pro filtr příjmů a výdajů -->
+        <ComboBox x:Name="fontComboBox" 
+                  SelectedIndex="{Binding SelectedIndex}" 
+                  Width="200" 
+                  MaxDropDownHeight="300">
+            <ComboBox.Items>
+                <ComboBoxItem Content="All" />
+                <ComboBoxItem Content="Incomes" />
+                <ComboBoxItem Content="Expenses" />
+            </ComboBox.Items>
+        </ComboBox>
+
+        <!-- TextBox pro filtrování podle poznámek -->
+        <TextBox Width="150" Watermark="Note contains..." Text="{Binding NoteFilter}" />
+
+        <!-- Nové DatePicker pro výběr data od/do -->
+        <DatePicker SelectedDate="{Binding StartDateFilter}" Width="150"/>
+        <DatePicker SelectedDate="{Binding EndDateFilter}" Width="150"/>
+
+        <!-- Filtrační tlačítka -->
+        <Button Content="Filter" Command="{Binding ApplyFilterCommand}" />
+        <Button Content="Clear" Command="{Binding ClearFilterCommand}" />
     </StackPanel>
+
+    <TextBlock Text="{Binding StatusMessage}" Foreground="Green"/>
+
+    <DataGrid ItemsSource="{Binding Transactions}" AutoGenerateColumns="False">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Date" Binding="{Binding FormattedDate}" Width="*"/>
+            <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="*"/>
+            <DataGridCheckBoxColumn Header="Income" Binding="{Binding IsIncome}" Width="*"/>
+            <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="150"/>
+            <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*"/>
+        </DataGrid.Columns>
+    </DataGrid>
+</StackPanel>
 </UserControl>
 
 
