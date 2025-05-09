@@ -353,6 +353,18 @@ public class DbService
 
         return null;
     }
-
+    public void DeleteTransaction(int transactionId)
+    {
+        using (var connection = new SQLiteConnection($"Data Source={DbFilePath};"))
+        {
+            connection.Open();
+            string query = "DELETE FROM Transactions WHERE Id = @Id";
+            using (var command = new SQLiteCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@Id", transactionId);
+                command.ExecuteNonQuery();
+            }
+        }
+    }
 
 }

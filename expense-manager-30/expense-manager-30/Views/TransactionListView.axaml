@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:expense_manager_30.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="expense_manager_30.Views.TransactionListView"
+             x:DataType="vm:TransactionListViewModel">
+
+
+    <StackPanel Margin="20" Spacing="10">
+        <TextBlock Text="All Transactions" FontSize="20" FontWeight="Bold"/>
+        <TextBlock Text="{Binding StatusMessage}" Foreground="Green"/>
+
+        <DataGrid ItemsSource="{Binding Transactions}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Binding="{Binding FormattedDate}" Width="*"/>
+                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="*"/>
+                <DataGridCheckBoxColumn Header="Income" Binding="{Binding IsIncome}" Width="*"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="150"/>
+                <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</UserControl>
+
+

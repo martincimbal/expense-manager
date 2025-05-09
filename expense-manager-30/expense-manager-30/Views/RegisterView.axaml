@@ -17,7 +17,7 @@
 
                 <TextBox Text="{Binding Username}" Width="200" Margin="0,5" Watermark="Username" />
                 <TextBox Text="{Binding Password}" PasswordChar="*" Width="200" Margin="0,5" Watermark="Password"/>
-                <TextBox Text="{Binding ConfirmPassword}" Width="200" Margin="0,5" Watermark="Confirm Password"/>
+                <TextBox Text="{Binding ConfirmPassword}" PasswordChar="*" Width="200" Margin="0,5" Watermark="Confirm Password"/>
         
                 <Button Content="Register" Width="200" Command="{Binding RegisterCommand}" Margin="0,20"/>
         

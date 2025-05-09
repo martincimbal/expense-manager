@@ -14,7 +14,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         CurrentPage = value switch
         {
-            // 0 => new TransactionListViewModel(),
+            0 => new TransactionListViewModel(),
             1 => new AddTransactionViewModel(),
             2 => new AddCategoryViewModel(),
             // 3 => new CategoryManagementViewModel(),
