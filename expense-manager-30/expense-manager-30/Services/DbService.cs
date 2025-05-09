@@ -335,6 +335,24 @@ public class DbService
 
         return (totalIncome, totalExpenses);
     }
+    
+    public int? GetUserIdByUsername(string username)
+    {
+        using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
+        connection.Open();
+
+        string query = "SELECT Id FROM Users WHERE Username = @Username";
+        using var command = new SQLiteCommand(query, connection);
+        command.Parameters.AddWithValue("@Username", username);
+
+        using var reader = command.ExecuteReader();
+        if (reader.Read())
+        {
+            return reader.GetInt32(0);
+        }
+
+        return null;
+    }
 
 
 }

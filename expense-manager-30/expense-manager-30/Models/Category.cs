@@ -6,4 +6,6 @@ public class Category
     public string Name { get; set; } = string.Empty;
     public bool IsIncome { get; set; }
     public int UserId { get; set; }
+    
+    public override string ToString() => Name;
 }

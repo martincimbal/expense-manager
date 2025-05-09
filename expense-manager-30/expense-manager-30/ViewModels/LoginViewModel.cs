@@ -1,4 +1,7 @@
+using System.Linq;
 using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using expense_manager_30.Services;
@@ -10,44 +13,47 @@ public partial class LoginViewModel : ObservableObject
 {
     private readonly DbService _dbService;
 
+    [ObservableProperty]
+    private string username = string.Empty;
+
+    [ObservableProperty]
+    private string password = string.Empty;
+
+    [ObservableProperty]
+    private string loginMessage = string.Empty;
+
+    public ICommand LoginCommand { get; }
+    public ICommand RegisterCommand { get; }
+
     public LoginViewModel()
     {
         _dbService = new DbService();
-        LoginCommand = new RelayCommand(LoginUser);
+        LoginCommand = new RelayCommand(Login);
+        RegisterCommand = new RelayCommand(OpenRegister);
     }
 
-    [ObservableProperty]
-    private string _username;
-
-    [ObservableProperty]
-    private string _password;
-
-    [ObservableProperty]
-    private string _errorMessage;
-
-    public ICommand LoginCommand { get; }
-
-    private void LoginUser()
+    private void Login()
     {
-        if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
-        {
-            ErrorMessage = "Please enter both username and password.";
-            return;
-        }
-
         if (_dbService.LoginUser(Username, Password))
         {
-            ErrorMessage = "Login successful!";
-            // Navigate to another page or perform any necessary action
+            var userId = _dbService.GetUserIdByUsername(Username);
+            if (userId != null)
+            {
+                Session.SetUser(userId.Value, Username);
+                LoginMessage = "Login successful.";
+                ReplaceWindow(new MainWindow());
+            }
+            else
+            {
+                LoginMessage = "Unexpected error: user not found.";
+            }
         }
         else
         {
-            ErrorMessage = "Invalid username or password.";
+            LoginMessage = "Invalid username or password.";
         }
     }
-    
-    
-    [RelayCommand]
+
     private void OpenRegister()
     {
         var registerView = new RegisterView
@@ -55,5 +61,14 @@ public partial class LoginViewModel : ObservableObject
             DataContext = new RegisterViewModel()
         };
         registerView.Show();
+    }
+
+    private void ReplaceWindow(Window newWindow)
+    {
+        if (Avalonia.Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime lifetime)
+            return;
+        var currentWindow = lifetime.Windows.FirstOrDefault(w => w.IsActive);
+        newWindow.Show();
+        currentWindow?.Close();
     }
 }
