@@ -11,6 +11,7 @@
     
     <UserControl.Resources>
         <converters:EnumEqualityConverter x:Key="EnumEqualityConverter"/>
+        <converters:StringEqualityConverter x:Key="StringEqualityConverter"/>
     </UserControl.Resources>
     
         <Design.DataContext>
@@ -27,30 +28,33 @@
                       Width="200"
                       HorizontalAlignment="Left"/>
 
-            <Border Name="PieSection" 
-                    IsVisible="{Binding SelectedChart, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Pie}">
-                <avalonia:PieChart Series="{Binding PieSeries}" 
-                                   Height="400"
-                                   LegendPosition="Right"
-                                   />
+            <Border IsVisible="{Binding SelectedChart, 
+                    Converter={StaticResource StringEqualityConverter}, 
+                    ConverterParameter='Categories'}">
+                <avalonia:PieChart
+                    Series="{Binding PieSeries}"
+                    Height="400"
+                    LegendPosition="Right"/>
             </Border>
 
-            <Border Name="BarSection" 
-                    IsVisible="{Binding SelectedChart, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Bar}">
-                <avalonia:CartesianChart Series="{Binding BarSeries}" 
-                                         Height="300"
-                                         XAxes="{Binding BarXAxis}"
-                                         YAxes="{Binding BarYAxis}"
-                                         />
+            <Border IsVisible="{Binding SelectedChart, 
+                    Converter={StaticResource StringEqualityConverter}, 
+                    ConverterParameter='Monthly Totals'}">
+                <avalonia:CartesianChart
+                    Series="{Binding BarSeries}"
+                    Height="300"
+                    XAxes="{Binding BarXAxis}"
+                    YAxes="{Binding BarYAxis}"/>
             </Border>
 
-            <Border Name="LineSection" 
-                    IsVisible="{Binding SelectedChart, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Line}">
-                <avalonia:CartesianChart Series="{Binding LineSeries}" 
-                                         Height="300"
-                                         XAxes="{Binding LineXAxis}"
-                                         YAxes="{Binding LineYAxis}"
-                                         />
+            <Border IsVisible="{Binding SelectedChart, 
+                    Converter={StaticResource StringEqualityConverter}, 
+                    ConverterParameter='Cumulative Balance'}">
+                <avalonia:CartesianChart 
+                    Series="{Binding LineSeries}" 
+                    Height="300"
+                    XAxes="{Binding LineXAxis}"
+                    YAxes="{Binding LineYAxis}"/>
             </Border>
         </StackPanel>
     </ScrollViewer>

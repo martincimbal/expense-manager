@@ -150,11 +150,13 @@ public partial class StatisticsViewModel : ViewModelBase
         Summary = $"{(IsIncome ? "Incomes" : "Expenses")} total: {total:C}, average: {avg:C}";
     }
     
-    public enum ChartType { Pie, Bar, Line }
+    public List<string> AvailableCharts { get; } = new()
+    {
+        "Categories",
+        "Monthly Totals",
+        "Cumulative Balance"
+    };
 
     [ObservableProperty]
-    private ChartType _selectedChart = ChartType.Pie;
-
-    // Seznam dostupných grafů pro ComboBox
-    public Array AvailableCharts => Enum.GetValues(typeof(ChartType));
+    private string _selectedChart = "Categories";
 }
