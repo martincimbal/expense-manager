@@ -18,11 +18,11 @@
 
         <SplitView.Pane>
             <ListBox SelectedIndex="{Binding SelectedIndex}">
-                <ListBoxItem>Statistics</ListBoxItem>
+                <ListBoxItem>Dashboard</ListBoxItem>
                 <ListBoxItem>Transactions</ListBoxItem>
                 <ListBoxItem>Add Transaction</ListBoxItem>
-                <ListBoxItem>Add Category</ListBoxItem>
                 <ListBoxItem>Categories</ListBoxItem>
+                <ListBoxItem>Statistics</ListBoxItem>
                 <ListBoxItem>Import/Export</ListBoxItem>
                 <ListBoxItem>Logout</ListBoxItem>
             </ListBox>

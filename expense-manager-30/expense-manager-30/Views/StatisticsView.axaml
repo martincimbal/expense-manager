@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonia="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
+        xmlns:viewModels="clr-namespace:expense_manager_30.ViewModels"
+        xmlns:converters="clr-namespace:expense_manager_30.Converters"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="expense_manager_30.Views.StatisticsView"
+        x:DataType="viewModels:StatisticsViewModel">
+    
+    <UserControl.Resources>
+        <converters:EnumEqualityConverter x:Key="EnumEqualityConverter"/>
+    </UserControl.Resources>
+    
+        <Design.DataContext>
+                <viewModels:StatisticsViewModel />
+        </Design.DataContext>
+
+    <ScrollViewer x:Name="MainScrollViewer">
+        <StackPanel Margin="20" Spacing="15">
+
+            <TextBlock Text="Transaction Statistics" FontSize="22" FontWeight="Bold"/>
+            <ComboBox ItemsSource="{Binding AvailableCharts}" 
+                      SelectedItem="{Binding SelectedChart}"
+                      Margin="0,0,0,20"
+                      Width="200"
+                      HorizontalAlignment="Left"/>
+
+            <Border Name="PieSection" 
+                    IsVisible="{Binding SelectedChart, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Pie}">
+                <avalonia:PieChart Series="{Binding PieSeries}" 
+                                   Height="400"
+                                   LegendPosition="Right"
+                                   />
+            </Border>
+
+            <Border Name="BarSection" 
+                    IsVisible="{Binding SelectedChart, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Bar}">
+                <avalonia:CartesianChart Series="{Binding BarSeries}" 
+                                         Height="300"
+                                         XAxes="{Binding BarXAxis}"
+                                         YAxes="{Binding BarYAxis}"
+                                         />
+            </Border>
+
+            <Border Name="LineSection" 
+                    IsVisible="{Binding SelectedChart, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Line}">
+                <avalonia:CartesianChart Series="{Binding LineSeries}" 
+                                         Height="300"
+                                         XAxes="{Binding LineXAxis}"
+                                         YAxes="{Binding LineYAxis}"
+                                         />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
