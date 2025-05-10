@@ -10,46 +10,57 @@
 
 
 <StackPanel Margin="20" Spacing="10">
-    <TextBlock Text="All Transactions" FontSize="20" FontWeight="Bold"/>
-    <StackPanel Orientation="Horizontal" Spacing="10">
-        <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedFilterCategory}" Width="150"/>
+        <TextBlock Text="All Transactions" FontSize="20" FontWeight="Bold"/>
+        
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <TextBlock Text="From" VerticalAlignment="Center"/>
+            <DatePicker SelectedDate="{Binding StartDateFilter}" Width="300"/>
+            <TextBlock Text="To" VerticalAlignment="Center"/>
+            <DatePicker SelectedDate="{Binding EndDateFilter}" Width="300"/>
+        </StackPanel>
 
-        <!-- ComboBox pro filtr příjmů a výdajů -->
-        <ComboBox x:Name="fontComboBox" 
-                  SelectedIndex="{Binding SelectedIndex}" 
-                  Width="200" 
-                  MaxDropDownHeight="300">
-            <ComboBox.Items>
-                <ComboBoxItem Content="All" />
-                <ComboBoxItem Content="Incomes" />
-                <ComboBoxItem Content="Expenses" />
-            </ComboBox.Items>
-        </ComboBox>
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <ComboBox ItemsSource="{Binding Categories}"
+                      SelectedItem="{Binding SelectedFilterCategory}"
+                      Width="150"/>
 
-        <!-- TextBox pro filtrování podle poznámek -->
-        <TextBox Width="150" Watermark="Note contains..." Text="{Binding NoteFilter}" />
+            <CheckBox Content="Income only"
+                      IsChecked="{Binding IsIncomeFilter}"
+                      VerticalAlignment="Center"/>
 
-        <!-- Nové DatePicker pro výběr data od/do -->
-        <DatePicker SelectedDate="{Binding StartDateFilter}" Width="150"/>
-        <DatePicker SelectedDate="{Binding EndDateFilter}" Width="150"/>
+            <TextBox Width="150"
+                     Text="{Binding NoteFilter}"
+                     Watermark="Note contains..."/>
 
-        <!-- Filtrační tlačítka -->
-        <Button Content="Filter" Command="{Binding ApplyFilterCommand}" />
-        <Button Content="Clear" Command="{Binding ClearFilterCommand}" />
+            <Button Content="Filter"
+                    Command="{Binding ApplyFilterCommand}"/>
+            <Button Content="Clear"
+                    Command="{Binding ClearFilterCommand}"/>
+        </StackPanel>
+
+
+        <TextBlock Text="{Binding StatusMessage}" Foreground="Green"/>
+        <DataGrid ItemsSource="{Binding Transactions}" AutoGenerateColumns="False"
+                  x:Name="myDataGrid">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Binding="{Binding FormattedDate}" Width="*"/>
+                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="*"/>
+                <DataGridCheckBoxColumn Header="Income" Binding="{Binding IsIncome}" Width="*"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="150"/>
+                <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*"/>
+                <DataGridTemplateColumn Width="*" Header="Action">
+                    <DataGridTemplateColumn.CellTemplate> 
+                        <DataTemplate> 
+                            <Button
+                                Content="Delete"
+                                Command="{Binding #myDataGrid.((vm:TransactionListViewModel)DataContext).DeleteTransactionCommand}"
+                                CommandParameter="{Binding}"/> 
+                        </DataTemplate> 
+                    </DataGridTemplateColumn.CellTemplate> 
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </StackPanel>
-
-    <TextBlock Text="{Binding StatusMessage}" Foreground="Green"/>
-
-    <DataGrid ItemsSource="{Binding Transactions}" AutoGenerateColumns="False">
-        <DataGrid.Columns>
-            <DataGridTextColumn Header="Date" Binding="{Binding FormattedDate}" Width="*"/>
-            <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="*"/>
-            <DataGridCheckBoxColumn Header="Income" Binding="{Binding IsIncome}" Width="*"/>
-            <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="150"/>
-            <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*"/>
-        </DataGrid.Columns>
-    </DataGrid>
-</StackPanel>
 </UserControl>
 
 

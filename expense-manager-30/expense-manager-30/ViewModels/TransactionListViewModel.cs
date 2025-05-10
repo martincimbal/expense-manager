@@ -10,45 +10,37 @@ using expense_manager_30.Services;
 namespace expense_manager_30.ViewModels;
 
 
-public partial class TransactionListViewModel : ViewModelBase{
+public partial class TransactionListViewModel : ViewModelBase
+{
     private readonly DbService _dbService;
 
-    [ObservableProperty]
-    private ObservableCollection<Transaction> _transactions = new();
+    [ObservableProperty] private ObservableCollection<Transaction> transactions = new();
 
-    [ObservableProperty]
-    private string _statusMessage = string.Empty;
-    
-    [ObservableProperty]
-    private Category? _selectedFilterCategory;
+    [ObservableProperty] private string statusMessage = string.Empty;
 
-    [ObservableProperty]
-    private ObservableCollection<Category> _categories = new();
-    
-    [ObservableProperty]
-    private bool? _isIncomeFilter = null;
+    [ObservableProperty] private Category? selectedFilterCategory;
 
-    [ObservableProperty]
-    private string? _noteFilter = null;
+    [ObservableProperty] private ObservableCollection<Category> categories = new();
 
-    [ObservableProperty]
-    private DateTimeOffset? _startDateFilter;
+    [ObservableProperty] private bool isIncomeFilter;
 
-    [ObservableProperty]
-    private DateTimeOffset? _endDateFilter;
+    [ObservableProperty] private string? noteFilter = null;
 
-    [ObservableProperty]
-    private int _selectedIndex;
+    [ObservableProperty] private DateTimeOffset? startDateFilter;
+
+    [ObservableProperty] private DateTimeOffset? endDateFilter;
 
     public ICommand ApplyFilterCommand { get; }
     public ICommand ClearFilterCommand { get; }
+    public ICommand DeleteTransactionCommand { get; }
 
     public TransactionListViewModel()
     {
         _dbService = new DbService();
-        LoadTransactions();
         ApplyFilterCommand = new RelayCommand(ApplyFilter);
         ClearFilterCommand = new RelayCommand(ClearFilter);
+        DeleteTransactionCommand = new RelayCommand<Transaction>(DeleteTransaction);
+        LoadTransactions();
     }
 
     [RelayCommand]
@@ -63,7 +55,7 @@ public partial class TransactionListViewModel : ViewModelBase{
 
         var userTransactions = _dbService.GetTransactions(Session.CurrentUserId);
         var categories = _dbService.GetCategories(Session.CurrentUserId);
-        
+
         foreach (var transaction in userTransactions)
         {
             var category = categories.FirstOrDefault(c => c.Id == transaction.CategoryId);
@@ -79,26 +71,16 @@ public partial class TransactionListViewModel : ViewModelBase{
         if (!Session.IsLoggedIn) return;
 
         var categoryId = SelectedFilterCategory?.Id;
-        
-        DateTime? startDate = _startDateFilter?.DateTime;
-        DateTime? endDate = _endDateFilter?.DateTime;
-
-        if (startDate.HasValue)
-        {
-            startDate = startDate.Value.Date;
-        }
-    
-        if (endDate.HasValue)
-        {
-            endDate = endDate.Value.Date.AddDays(1).AddSeconds(-1);
-        }
+        DateTime? startDate = StartDateFilter?.DateTime.Date;
+        DateTime? endDate = EndDateFilter?.DateTime.Date.AddDays(1).AddSeconds(-1);
+        bool? incomeFilter = IsIncomeFilter ? true : null;
 
         var filtered = _dbService.GetFilteredTransactions(
             Session.CurrentUserId,
             categoryId,
             startDate,
             endDate,
-            IsIncomeFilter,
+            incomeFilter,
             string.IsNullOrWhiteSpace(NoteFilter) ? null : NoteFilter
         );
 
@@ -117,9 +99,16 @@ public partial class TransactionListViewModel : ViewModelBase{
         SelectedFilterCategory = null;
         StartDateFilter = null;
         EndDateFilter = null;
-        SelectedIndex = 0;
-        IsIncomeFilter = null;
+        isIncomeFilter = false;
         NoteFilter = null;
+        LoadTransactions();
+    }
+
+    private void DeleteTransaction(Transaction transaction)
+    {
+        if (transaction == null) return;
+
+        _dbService.DeleteTransaction(transaction.Id);
         LoadTransactions();
     }
 }
