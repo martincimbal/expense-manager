@@ -12,20 +12,23 @@
         <vm:EditTransactionViewModel />
     </Design.DataContext>
 
-    <StackPanel>
+    <StackPanel Margin="20" Spacing="10">
         <TextBlock Text="Amount" />
-        <TextBox Text="{Binding Transaction.Amount, Mode=TwoWay}" />
+        <TextBox Text="{Binding Amount, Mode=TwoWay}" />
 
         <TextBlock Text="Note" />
-        <TextBox Text="{Binding Transaction.Note, Mode=TwoWay}" />
+        <TextBox Text="{Binding Note, Mode=TwoWay}" />
 
         <TextBlock Text="Category" />
         <ComboBox ItemsSource="{Binding Categories}"
-                  SelectedItem="{Binding Transaction.CategoryId}"
-                  />
-        
-        <CheckBox IsChecked="{Binding Transaction.IsIncome, Mode=TwoWay}"
-                  Content="Is Income" />
+                  SelectedItem="{Binding SelectedCategory}"/>
+
+        <TextBlock Text="Date" />
+        <DatePicker SelectedDate="{Binding Date, Mode=TwoWay}" />
+
+        <CheckBox IsChecked="{Binding IsIncome}" Content="Is Income" />
+
+        <TextBlock Text="{Binding StatusMessage}" Foreground="Red" />
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
             <Button Content="Cancel" Command="{Binding CancelCommand}" />

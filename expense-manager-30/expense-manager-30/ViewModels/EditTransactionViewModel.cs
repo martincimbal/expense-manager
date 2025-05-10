@@ -15,9 +15,26 @@ public partial class EditTransactionViewModel : ViewModelBase
 {
     private readonly DbService _dbService;
 
-    public Transaction Transaction { get; }
+    [ObservableProperty]
+    private string amount;
 
-    public ObservableCollection<Category> Categories { get; }
+    [ObservableProperty]
+    private bool isIncome;
+
+    [ObservableProperty]
+    private DateTimeOffset date;
+
+    [ObservableProperty]
+    private string note;
+
+    [ObservableProperty]
+    private ObservableCollection<Category> categories;
+
+    [ObservableProperty]
+    private Category? selectedCategory;
+
+    [ObservableProperty]
+    private string statusMessage = string.Empty;
 
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
@@ -25,10 +42,20 @@ public partial class EditTransactionViewModel : ViewModelBase
     public Action? CloseAction { get; set; }
     public bool IsSaved { get; private set; } = false;
 
+    private readonly int transactionId;
+
     public EditTransactionViewModel(Transaction transaction, ObservableCollection<Category> categories)
     {
         _dbService = new DbService();
-        Transaction = transaction;
+
+        // inicializace z modelu
+        transactionId = transaction.Id;
+        Amount = transaction.Amount.ToString("0.##");
+        IsIncome = transaction.IsIncome;
+        Date = transaction.Date;
+        Note = transaction.Note;
+        SelectedCategory = categories.FirstOrDefault(c => c.Id == transaction.CategoryId);
+
         Categories = categories;
 
         SaveCommand = new RelayCommand(Save);
@@ -37,7 +64,36 @@ public partial class EditTransactionViewModel : ViewModelBase
 
     private void Save()
     {
-        _dbService.UpdateTransaction(Transaction);
+        if (!decimal.TryParse(Amount, out var parsedAmount) || parsedAmount <= 0)
+        {
+            StatusMessage = "Please enter a valid amount.";
+            return;
+        }
+
+        if (SelectedCategory == null)
+        {
+            StatusMessage = "Please select a category.";
+            return;
+        }
+
+        if (!Session.IsLoggedIn)
+        {
+            StatusMessage = "Error: User not logged in.";
+            return;
+        }
+
+        var updatedTransaction = new Transaction
+        {
+            Id = transactionId,
+            Amount = parsedAmount,
+            IsIncome = IsIncome,
+            Date = Date.DateTime,
+            Note = Note,
+            CategoryId = SelectedCategory.Id,
+            UserId = Session.CurrentUserId
+        };
+
+        _dbService.UpdateTransaction(updatedTransaction);
         IsSaved = true;
         CloseAction?.Invoke();
     }
