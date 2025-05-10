@@ -48,6 +48,18 @@
                 <DataGridCheckBoxColumn Header="Income" Binding="{Binding IsIncome}" Width="*"/>
                 <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="150"/>
                 <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*"/>
+                
+                <DataGridTemplateColumn Width="*" Header="Edit">
+                    <DataGridTemplateColumn.CellTemplate> 
+                        <DataTemplate> 
+                            <Button
+                                Content="Delete"
+                                Command="{Binding #myDataGrid.((vm:TransactionListViewModel)DataContext).EditTransactionCommand}"
+                                CommandParameter="{Binding}"/> 
+                        </DataTemplate> 
+                    </DataGridTemplateColumn.CellTemplate> 
+                </DataGridTemplateColumn>
+                
                 <DataGridTemplateColumn Width="*" Header="Action">
                     <DataGridTemplateColumn.CellTemplate> 
                         <DataTemplate> 

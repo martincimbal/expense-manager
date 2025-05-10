@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace expense_manager_30.Views;
 
-public partial class EditTransactionView : Window
+public partial class EditTransactionWindow : Window
 {
-    public EditTransactionView()
+    public EditTransactionWindow()
     {
         InitializeComponent();
     }

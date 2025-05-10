@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using expense_manager_30.Models;
 using expense_manager_30.Services;
+using expense_manager_30.Views;
 
 namespace expense_manager_30.ViewModels;
 
@@ -33,6 +34,7 @@ public partial class TransactionListViewModel : ViewModelBase
     public ICommand ApplyFilterCommand { get; }
     public ICommand ClearFilterCommand { get; }
     public ICommand DeleteTransactionCommand { get; }
+    public ICommand EditTransactionCommand { get; }
 
     public TransactionListViewModel()
     {
@@ -40,6 +42,7 @@ public partial class TransactionListViewModel : ViewModelBase
         ApplyFilterCommand = new RelayCommand(ApplyFilter);
         ClearFilterCommand = new RelayCommand(ClearFilter);
         DeleteTransactionCommand = new RelayCommand<Transaction>(DeleteTransaction);
+        EditTransactionCommand = new RelayCommand<Transaction>(EditTransaction);
         LoadTransactions();
     }
 
@@ -111,4 +114,26 @@ public partial class TransactionListViewModel : ViewModelBase
         _dbService.DeleteTransaction(transaction.Id);
         LoadTransactions();
     }
+    
+    private void EditTransaction(Transaction transaction)
+    {
+        if (transaction == null) return;
+
+        // Získej všechny kategorie, které použiješ pro ComboBox v okně pro úpravu
+        var categories = _dbService.GetCategories(Session.CurrentUserId);
+
+        // Vytvoření instance nového okna
+        var editWindow = new EditTransactionWindow();
+
+        // Vytvoření ViewModelu pro okno
+        var viewModel = new EditTransactionViewModel(transaction, new ObservableCollection<Category>(categories));
+
+        // Přiřazení ViewModelu jako DataContext pro okno
+        editWindow.DataContext = viewModel;
+
+        // Zobrazení okna
+        editWindow.Show();  // Tímto způsobem je okno modální a počká na zavření okna
+    }
+
+
 }
