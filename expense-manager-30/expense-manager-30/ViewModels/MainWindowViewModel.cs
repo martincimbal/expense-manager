@@ -14,7 +14,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         CurrentPage = value switch
         {
-            0 => new AddTransactionViewModel(),
+            0 => new DashboardViewModel(),
             1 => new TransactionListViewModel(),
             2 => new AddTransactionViewModel(),
             _ => new AddCategoryViewModel(),
@@ -28,7 +28,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
         SelectedIndex = 0;
-        // CurrentPage = new TransactionListViewModel();
-        CurrentPage = new AddCategoryViewModel();
+        CurrentPage = new DashboardViewModel();
     }
 }
