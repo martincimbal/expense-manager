@@ -1,6 +1,8 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Windows.Input;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,51 +13,38 @@ namespace expense_manager_30.ViewModels;
 
 public partial class EditTransactionViewModel : ViewModelBase
 {
-    private readonly DbService _dbService = new();
+    private readonly DbService _dbService;
+
+    public Transaction Transaction { get; }
 
     public ObservableCollection<Category> Categories { get; }
 
-    [ObservableProperty] private Transaction transaction;
+    public ICommand SaveCommand { get; }
+    public ICommand CancelCommand { get; }
 
-    [ObservableProperty] private Category? selectedCategory;
+    public Action? CloseAction { get; set; }
+    public bool IsSaved { get; private set; } = false;
 
-    public IRelayCommand SaveCommand { get; }
-
-    public EditTransactionViewModel(Transaction transactionToEdit, ObservableCollection<Category> categories)
+    public EditTransactionViewModel(Transaction transaction, ObservableCollection<Category> categories)
     {
-        Transaction = new Transaction
-        {
-            Id = transactionToEdit.Id,
-            Amount = transactionToEdit.Amount,
-            Date = transactionToEdit.Date,
-            Note = transactionToEdit.Note,
-            CategoryId = transactionToEdit.CategoryId,
-            IsIncome = transactionToEdit.IsIncome
-        };
-
+        _dbService = new DbService();
+        Transaction = transaction;
         Categories = categories;
-        SelectedCategory = Categories.FirstOrDefault(c => c.Id == Transaction.CategoryId);
+
         SaveCommand = new RelayCommand(Save);
+        CancelCommand = new RelayCommand(Cancel);
     }
 
     private void Save()
     {
-        return;
+        _dbService.UpdateTransaction(Transaction);
+        IsSaved = true;
+        CloseAction?.Invoke();
     }
-    // {
-    //     if (SelectedCategory == null)
-    //     {
-    //         MessageBox.Show("Please select a category.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
-    //         return;
-    //     }
-    //
-    //     Transaction.CategoryId = SelectedCategory.Id;
-    //     _dbService.UpdateTransaction(Transaction);
-    //
-    //     // Zavřít okno, pokud běží jako dialog
-    //     Application.Current.Windows
-    //         .OfType<Window>()
-    //         .FirstOrDefault(w => w.DataContext == this)?
-    //         .Close();
-    // }
+
+    private void Cancel()
+    {
+        IsSaved = false;
+        CloseAction?.Invoke();
+    }
 }

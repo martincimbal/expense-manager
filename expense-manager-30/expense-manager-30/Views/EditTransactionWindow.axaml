@@ -2,8 +2,34 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:expense_manager_30.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="expense_manager_30.Views.EditTransactionWindow"
+        x:DataType="vm:EditTransactionViewModel"
         Title="EditTransactionView">
-    Welcome !!!!
+    
+    <Design.DataContext>
+        <vm:EditTransactionViewModel />
+    </Design.DataContext>
+
+    <StackPanel>
+        <TextBlock Text="Amount" />
+        <TextBox Text="{Binding Transaction.Amount, Mode=TwoWay}" />
+
+        <TextBlock Text="Note" />
+        <TextBox Text="{Binding Transaction.Note, Mode=TwoWay}" />
+
+        <TextBlock Text="Category" />
+        <ComboBox ItemsSource="{Binding Categories}"
+                  SelectedItem="{Binding Transaction.CategoryId}"
+                  />
+        
+        <CheckBox IsChecked="{Binding Transaction.IsIncome, Mode=TwoWay}"
+                  Content="Is Income" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+            <Button Content="Cancel" Command="{Binding CancelCommand}" />
+            <Button Content="Save" Command="{Binding SaveCommand}" />
+        </StackPanel>
+    </StackPanel>
 </Window>

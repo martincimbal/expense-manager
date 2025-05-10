@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using expense_manager_30.Models;
@@ -115,25 +116,32 @@ public partial class TransactionListViewModel : ViewModelBase
         LoadTransactions();
     }
     
-    private void EditTransaction(Transaction transaction)
+    private async void EditTransaction(Transaction transaction)
     {
         if (transaction == null) return;
 
-        // Získej všechny kategorie, které použiješ pro ComboBox v okně pro úpravu
         var categories = _dbService.GetCategories(Session.CurrentUserId);
 
-        // Vytvoření instance nového okna
         var editWindow = new EditTransactionWindow();
-
-        // Vytvoření ViewModelu pro okno
         var viewModel = new EditTransactionViewModel(transaction, new ObservableCollection<Category>(categories));
+        viewModel.CloseAction = () => editWindow.Close();
 
-        // Přiřazení ViewModelu jako DataContext pro okno
         editWindow.DataContext = viewModel;
 
-        // Zobrazení okna
-        editWindow.Show();  // Tímto způsobem je okno modální a počká na zavření okna
+        var lifetime = Avalonia.Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
+        var ownerWindow = lifetime?.Windows.FirstOrDefault(w => w.IsActive);
+
+        if (ownerWindow != null)
+        {
+            await editWindow.ShowDialog(ownerWindow);
+
+            if (viewModel.IsSaved)
+            {
+                LoadTransactions();
+            }
+        }
     }
+
 
 
 }

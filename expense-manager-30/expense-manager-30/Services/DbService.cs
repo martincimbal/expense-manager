@@ -392,4 +392,29 @@ public class DbService
         }
     }
 
+    public void UpdateTransaction(Transaction transaction)
+    {
+        using var conn = new SQLiteConnection($"Data Source={DbFilePath};");
+        conn.Open();
+
+        var cmd = conn.CreateCommand();
+        cmd.CommandText = @"
+        UPDATE Transactions
+        SET Amount = @amount,
+            Date = @date,
+            Note = @note,
+            CategoryId = @categoryId,
+            IsIncome = @isIncome
+        WHERE Id = @id
+    ";
+        cmd.Parameters.AddWithValue("@amount", transaction.Amount);
+        cmd.Parameters.AddWithValue("@date", transaction.Date);
+        cmd.Parameters.AddWithValue("@note", transaction.Note ?? "");
+        cmd.Parameters.AddWithValue("@categoryId", transaction.CategoryId);
+        cmd.Parameters.AddWithValue("@isIncome", transaction.IsIncome ? 1 : 0);
+        cmd.Parameters.AddWithValue("@id", transaction.Id);
+
+        cmd.ExecuteNonQuery();
+    }
+
 }
