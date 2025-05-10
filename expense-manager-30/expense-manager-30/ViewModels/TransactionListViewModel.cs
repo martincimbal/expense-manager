@@ -135,7 +135,7 @@ public partial class TransactionListViewModel : ViewModelBase
         {
             await editWindow.ShowDialog(ownerWindow);
 
-            if (viewModel.IsSaved)
+            if (viewModel.IsSaved || viewModel.IsDeleted)
             {
                 LoadTransactions();
             }

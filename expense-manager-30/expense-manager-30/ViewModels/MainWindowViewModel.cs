@@ -14,14 +14,14 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         CurrentPage = value switch
         {
-            0 => new TransactionListViewModel(),
-            1 => new AddTransactionViewModel(),
-            2 => new AddCategoryViewModel(),
+            0 => new AddTransactionViewModel(),
+            1 => new TransactionListViewModel(),
+            2 => new AddTransactionViewModel(),
+            _ => new AddCategoryViewModel(),
             // 3 => new CategoryManagementViewModel(),
             // 4 => new ImportExportViewModel(),
             // 5 => new LogoutViewModel(),
             // _ => CurrentPage
-            _ => new AddTransactionViewModel()
         };
     }
 

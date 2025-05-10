@@ -32,7 +32,8 @@
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
             <Button Content="Cancel" Command="{Binding CancelCommand}" />
-            <Button Content="Save" Command="{Binding SaveCommand}" />
+            <Button Content="Delete" Command="{Binding DeleteCommand}" Background="IndianRed" />
+            <Button Content="Save" Command="{Binding SaveCommand}"/>
         </StackPanel>
     </StackPanel>
 </Window>

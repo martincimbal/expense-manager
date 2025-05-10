@@ -43,12 +43,15 @@ public partial class EditTransactionViewModel : ViewModelBase
     public bool IsSaved { get; private set; } = false;
 
     private readonly int transactionId;
+    public ICommand DeleteCommand { get; }
+
+    public bool IsDeleted { get; private set; } = false;
+
 
     public EditTransactionViewModel(Transaction transaction, ObservableCollection<Category> categories)
     {
         _dbService = new DbService();
-
-        // inicializace z modelu
+        
         transactionId = transaction.Id;
         Amount = transaction.Amount.ToString("0.##");
         IsIncome = transaction.IsIncome;
@@ -60,6 +63,7 @@ public partial class EditTransactionViewModel : ViewModelBase
 
         SaveCommand = new RelayCommand(Save);
         CancelCommand = new RelayCommand(Cancel);
+        DeleteCommand = new RelayCommand(Delete);
     }
 
     private void Save()
@@ -101,6 +105,19 @@ public partial class EditTransactionViewModel : ViewModelBase
     private void Cancel()
     {
         IsSaved = false;
+        CloseAction?.Invoke();
+    }
+    
+    private void Delete()
+    {
+        if (!Session.IsLoggedIn)
+        {
+            StatusMessage = "Error: User not logged in.";
+            return;
+        } 
+        
+        _dbService.DeleteTransaction(transactionId);
+        IsDeleted = true;
         CloseAction?.Invoke();
     }
 }
