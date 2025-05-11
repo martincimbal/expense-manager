@@ -11,7 +11,7 @@ using expense_manager_30.Services;
 
 namespace expense_manager_30.ViewModels;
 
-public partial class EditTransactionViewModel : ViewModelBase
+public partial class EditTransactionWindowViewModel : ViewModelBase
 {
     private readonly DbService _dbService;
 
@@ -48,7 +48,7 @@ public partial class EditTransactionViewModel : ViewModelBase
     public bool IsDeleted { get; private set; } = false;
 
 
-    public EditTransactionViewModel(Transaction transaction, ObservableCollection<Category> categories)
+    public EditTransactionWindowViewModel(Transaction transaction, ObservableCollection<Category> categories)
     {
         _dbService = new DbService();
         

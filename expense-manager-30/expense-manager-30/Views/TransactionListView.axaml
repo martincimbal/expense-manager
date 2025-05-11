@@ -9,20 +9,34 @@
              x:DataType="vm:TransactionListViewModel">
 
 
-<StackPanel Margin="20" Spacing="10">
-        <TextBlock Text="All Transactions" FontSize="20" FontWeight="Bold"/>
+<StackPanel Margin="20"
+            Spacing="10">
+        <TextBlock Text="All Transactions"
+                   FontSize="20"
+                   FontWeight="Bold"/>
         
-        <StackPanel Orientation="Horizontal" Spacing="10">
-            <TextBlock Text="From" VerticalAlignment="Center"/>
-            <DatePicker SelectedDate="{Binding StartDateFilter}" Width="300"/>
-            <TextBlock Text="To" VerticalAlignment="Center"/>
-            <DatePicker SelectedDate="{Binding EndDateFilter}" Width="300"/>
+        <StackPanel Orientation="Horizontal"
+                    Spacing="10">
+            
+            <TextBlock Text="From"
+                       VerticalAlignment="Center"/>
+            
+            <DatePicker SelectedDate="{Binding StartDateFilter}"
+                        Width="300"/>
+            
+            <TextBlock Text="To"
+                       VerticalAlignment="Center"/>
+            
+            <DatePicker SelectedDate="{Binding EndDateFilter}"
+                        Width="300"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Spacing="10">
             <ComboBox ItemsSource="{Binding Categories}"
                       SelectedItem="{Binding SelectedFilterCategory}"
-                      Width="150"/>
+                      MaxWidth="300"
+                      
+                      />
 
             <CheckBox Content="Income only"
                       IsChecked="{Binding IsIncomeFilter}"
@@ -39,23 +53,42 @@
         </StackPanel>
 
 
-        <TextBlock Text="{Binding StatusMessage}" Foreground="Green"/>
-        <DataGrid ItemsSource="{Binding Transactions}" AutoGenerateColumns="False"
-                  x:Name="myDataGrid">
+        <TextBlock Text="{Binding StatusMessage}"
+                   Foreground="Green"/>
+        
+        <DataGrid ItemsSource="{Binding Transactions}"
+                  AutoGenerateColumns="False"
+                  x:Name="MyDataGrid">
+            
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding FormattedDate}" Width="*"/>
-                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="*"/>
-                <DataGridCheckBoxColumn Header="Income" Binding="{Binding IsIncome}" Width="*"/>
-                <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="150"/>
-                <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*"/>
+                <DataGridTextColumn Header="Date"
+                                    Binding="{Binding FormattedDate}"
+                                    Width="150"/>
                 
-                <DataGridTemplateColumn Width="*" Header="Action">
+                <DataGridTextColumn Header="Amount"
+                                    Binding="{Binding Amount}"
+                                    Width="*"/>
+                
+                <DataGridCheckBoxColumn Header="Income"
+                                        Binding="{Binding IsIncome}"
+                                        Width="90"/>
+                
+                <DataGridTextColumn Header="Category"
+                                    Binding="{Binding CategoryName}"
+                                    Width="*"/>
+                
+                <DataGridTextColumn Header="Note"
+                                    Binding="{Binding Note}"
+                                    Width="*"/>
+                
+                <DataGridTemplateColumn Header="Action">
                     <DataGridTemplateColumn.CellTemplate> 
                         <DataTemplate> 
                             <Button
                                 Content="Edit"
-                                Command="{Binding #myDataGrid.((vm:TransactionListViewModel)DataContext).EditTransactionCommand}"
-                                CommandParameter="{Binding}"/> 
+                                Command="{Binding #MyDataGrid.((vm:TransactionListViewModel)DataContext).EditTransactionCommand}"
+                                CommandParameter="{Binding}"
+                                Width="70"/> 
                         </DataTemplate> 
                     </DataGridTemplateColumn.CellTemplate> 
                 </DataGridTemplateColumn>

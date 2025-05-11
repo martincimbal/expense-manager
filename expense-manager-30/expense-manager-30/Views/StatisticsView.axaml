@@ -19,7 +19,8 @@
         </Design.DataContext>
 
     <ScrollViewer x:Name="MainScrollViewer">
-        <StackPanel Margin="20" Spacing="15">
+        <StackPanel Margin="20"
+                    Spacing="15">
 
             <TextBlock Text="Transaction Statistics" FontSize="22" FontWeight="Bold"/>
             <ComboBox ItemsSource="{Binding AvailableCharts}" 

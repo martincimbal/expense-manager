@@ -6,11 +6,11 @@ using expense_manager_30.Services;
 
 namespace expense_manager_30.ViewModels;
 
-public partial class RegisterViewModel : ObservableObject
+public partial class RegisterWindowViewModel : ObservableObject
 {
     private readonly DbService _dbService;
 
-    public RegisterViewModel()
+    public RegisterWindowViewModel()
     {
         _dbService = new DbService();
         RegisterCommand = new RelayCommand(RegisterUser);

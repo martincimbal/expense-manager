@@ -9,7 +9,7 @@ using expense_manager_30.Views;
 
 namespace expense_manager_30.ViewModels;
 
-public partial class LoginViewModel : ObservableObject
+public partial class LoginWindowViewModel : ObservableObject
 {
     private readonly DbService _dbService;
 
@@ -25,7 +25,7 @@ public partial class LoginViewModel : ObservableObject
     public ICommand LoginCommand { get; }
     public ICommand RegisterCommand { get; }
 
-    public LoginViewModel()
+    public LoginWindowViewModel()
     {
         _dbService = new DbService();
         LoginCommand = new RelayCommand(Login);
@@ -56,9 +56,9 @@ public partial class LoginViewModel : ObservableObject
 
     private void OpenRegister()
     {
-        var registerView = new RegisterView
+        var registerView = new RegisterWindowView
         {
-            DataContext = new RegisterViewModel()
+            DataContext = new RegisterWindowViewModel()
         };
         registerView.Show();
     }

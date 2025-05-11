@@ -5,25 +5,33 @@
         xmlns:vm="clr-namespace:expense_manager_30.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="expense_manager_30.Views.EditTransactionWindow"
-        x:DataType="vm:EditTransactionViewModel"
-        Title="EditTransactionView">
+        x:DataType="vm:EditTransactionWindowViewModel"
+        Title="Edit Transaction"
+        Width="400"
+        Height="450">
     
     <Design.DataContext>
-        <vm:EditTransactionViewModel />
+        <vm:EditTransactionWindowViewModel />
     </Design.DataContext>
 
-    <StackPanel Margin="20" Spacing="10">
+    <StackPanel Margin="20"
+                Spacing="10">
+        
         <TextBlock Text="Amount" />
+        
         <TextBox Text="{Binding Amount, Mode=TwoWay}" />
 
         <TextBlock Text="Note" />
+        
         <TextBox Text="{Binding Note, Mode=TwoWay}" />
 
         <TextBlock Text="Category" />
+        
         <ComboBox ItemsSource="{Binding Categories}"
                   SelectedItem="{Binding SelectedCategory}"/>
 
         <TextBlock Text="Date" />
+        
         <DatePicker SelectedDate="{Binding Date, Mode=TwoWay}" />
 
         <CheckBox IsChecked="{Binding IsIncome}" Content="Is Income" />
@@ -31,9 +39,18 @@
         <TextBlock Text="{Binding StatusMessage}" Foreground="Red" />
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
-            <Button Content="Cancel" Command="{Binding CancelCommand}" />
-            <Button Content="Delete" Command="{Binding DeleteCommand}" Background="IndianRed" />
-            <Button Content="Save" Command="{Binding SaveCommand}"/>
+            <Button Content="Delete"
+                    Margin="50"
+                    Command="{Binding DeleteCommand}"
+                    Background="IndianRed" 
+                    HorizontalAlignment="Left"/>
+            
+            <Button Content="Cancel"
+                    Command="{Binding CancelCommand}" />
+            
+            <Button Content="Save"
+                    Command="{Binding SaveCommand}"
+                    Background="Green"/>
         </StackPanel>
     </StackPanel>
 </Window>

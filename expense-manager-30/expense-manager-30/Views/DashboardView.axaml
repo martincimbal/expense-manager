@@ -11,45 +11,86 @@
         <viewModels:DashboardViewModel />
     </Design.DataContext>
 
-    <StackPanel Margin="20" Spacing="15">
-        <TextBlock Text="Account Dashboard" FontSize="22" FontWeight="Bold" />
+    <StackPanel Margin="20"
+                Spacing="15">
+        
+        <TextBlock Text="Account Dashboard"
+                   FontSize="22" 
+                   FontWeight="Bold" />
 
-        <StackPanel Orientation="Horizontal" Spacing="40">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="40">
+            
             <StackPanel>
-                <TextBlock Text="Current Balance:" FontSize="16" />
-                <TextBlock Text="{Binding CurrentBalance, StringFormat='{}{0:C}'}" FontSize="16" FontWeight="Bold" />
+                <TextBlock Text="Current Balance:"
+                           FontSize="16" />
+                
+                <TextBlock Text="{Binding CurrentBalance, StringFormat='{}{0:C}'}"
+                           FontSize="16"
+                           FontWeight="Bold" />
+                
             </StackPanel>
 
             <StackPanel>
-                <TextBlock Text="Last Month Balance:" FontSize="16" />
-                <TextBlock Text="{Binding LastMonthBalance, StringFormat='{}{0:C}'}" FontSize="16" FontWeight="Bold" />
+                <TextBlock Text="Last Month Balance:"
+                           FontSize="16" />
+                
+                <TextBlock Text="{Binding LastMonthBalance, StringFormat='{}{0:C}'}"
+                           FontSize="16"
+                           FontWeight="Bold" />
+                
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Spacing="40">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="40">
+            
             <StackPanel>
-                <TextBlock Text="Total Transactions:" FontSize="16" />
-                <TextBlock Text="{Binding TotalTransactions}" FontSize="16" FontWeight="Bold" />
+                <TextBlock Text="Total Transactions:"
+                           FontSize="16" />
+                
+                <TextBlock Text="{Binding TotalTransactions}"
+                           FontSize="16"
+                           FontWeight="Bold" />
+                
             </StackPanel>
 
             <StackPanel>
-                <TextBlock Text="Transactions Last Month:" FontSize="16" />
-                <TextBlock Text="{Binding LastMonthTransactions}" FontSize="16" FontWeight="Bold" />
+                <TextBlock Text="Transactions Last Month:"
+                           FontSize="16" />
+                
+                <TextBlock Text="{Binding LastMonthTransactions}"
+                           FontSize="16"
+                           FontWeight="Bold" />
+                
             </StackPanel>
         </StackPanel>
 
-        <TextBlock Text="Top 3 Categories:" FontSize="16" Margin="0,10,0,0" />
+        <TextBlock Text="Top 3 Categories:"
+                   FontSize="16"
+                   Margin="0,10,0,0" />
+        
         <ItemsControl ItemsSource="{Binding TopCategories}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="14" />
+                    <TextBlock Text="{Binding}"
+                               FontSize="14" />
+                    
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="0,20,0,0">
-            <Button Content="View Transactions" Command="{Binding GoToTransactionsCommand}" />
-            <Button Content="View Statistics" Command="{Binding GoToStatisticsCommand}" />
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Spacing="20"
+                    Margin="0,20,0,0">
+            
+            <Button Content="View Transactions"
+                    Command="{Binding GoToTransactionsCommand}" />
+            
+            <Button Content="View Statistics"
+                    Command="{Binding GoToStatisticsCommand}" />
+            
         </StackPanel>
     </StackPanel>
 </UserControl>

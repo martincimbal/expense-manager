@@ -123,7 +123,7 @@ public partial class TransactionListViewModel : ViewModelBase
         var categories = _dbService.GetCategories(Session.CurrentUserId);
 
         var editWindow = new EditTransactionWindow();
-        var viewModel = new EditTransactionViewModel(transaction, new ObservableCollection<Category>(categories));
+        var viewModel = new EditTransactionWindowViewModel(transaction, new ObservableCollection<Category>(categories));
         viewModel.CloseAction = () => editWindow.Close();
 
         editWindow.DataContext = viewModel;

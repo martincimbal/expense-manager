@@ -5,11 +5,11 @@ using expense_manager_30.ViewModels;
 
 namespace expense_manager_30.Views;
 
-public partial class RegisterView : Window
+public partial class RegisterWindowView : Window
 {
-    public RegisterView()
+    public RegisterWindowView()
     {
         InitializeComponent();
-        DataContext = new RegisterViewModel();
+        DataContext = new RegisterWindowViewModel();
     }
 }

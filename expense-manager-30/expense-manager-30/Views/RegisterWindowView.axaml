@@ -1,0 +1,51 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:expense_manager_30.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="expense_manager_30.Views.RegisterWindowView"
+        x:DataType="viewModels:RegisterWindowViewModel"
+        Title="Register"
+        Width="450"
+        Height="500">
+    
+        <Window.DataContext>
+                <viewModels:RegisterWindowViewModel/>
+        </Window.DataContext>
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Register"
+                           FontSize="24"
+                           Margin="0,0,0,20"
+                           HorizontalAlignment="Center"/>
+
+                <TextBox Text="{Binding Username}"
+                         Width="200"
+                         Margin="0,5"
+                         Watermark="Username" />
+                
+                <TextBox Text="{Binding Password}"
+                         PasswordChar="*"
+                         Width="200"
+                         Margin="0,5"
+                         Watermark="Password"/>
+                
+                <TextBox Text="{Binding ConfirmPassword}"
+                         PasswordChar="*"
+                         Width="200"
+                         Margin="0,5"
+                         Watermark="Confirm Password"/>
+        
+                <Button Content="Register" Width="150"
+                        Command="{Binding RegisterCommand}"
+                        Margin="0,20"
+                        HorizontalContentAlignment="Center"
+                        HorizontalAlignment="Center"/>
+        
+                <TextBlock Text="{Binding ErrorMessage}"
+                           Foreground="Red"
+                           Margin="0,10"
+                           HorizontalAlignment="Center"/>
+        </StackPanel>
+</Window>

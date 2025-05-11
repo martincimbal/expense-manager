@@ -11,7 +11,7 @@ public partial class EditTransactionWindow : Window
     {
         InitializeComponent();
 
-        if (DataContext is EditTransactionViewModel vm)
+        if (DataContext is EditTransactionWindowViewModel vm)
         {
             vm.CloseAction = Close;
         }

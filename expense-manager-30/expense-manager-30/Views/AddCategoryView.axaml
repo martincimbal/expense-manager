@@ -8,35 +8,37 @@
              x:DataType="vm:AddCategoryViewModel">
     
     <StackPanel Margin="20"
-                Spacing="20"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Top">
+                Spacing="15"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Width="300">
         
         <TextBlock Text="Add New Category"
-                   FontSize="20"
+                   FontSize="22"
                    FontWeight="Bold"
-                   HorizontalAlignment="Center"/>
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"/>
         
-        <StackPanel Spacing="10"
-                    HorizontalAlignment="Stretch">
-            
+        <StackPanel Spacing="8">
             <TextBlock Text="Category Name:"
                        FontWeight="SemiBold"/>
             
             <TextBox Watermark="Enter category name"
                      Text="{Binding CategoryName}"
-                     HorizontalAlignment="Stretch"/>
+                     Width="250"/>
             
             <Button Content="Add Category"
                     Command="{Binding AddCategoryCommand}"
-                    HorizontalAlignment="Stretch"
+                    HorizontalAlignment="Center"
                     Padding="10,5"
-                    Margin="0,10,0,0"/>
+                    Margin="0,10,0,0"
+                    MinWidth="120"/>
         </StackPanel>
         
         <TextBlock Text="{Binding StatusMessage}"
                    Foreground="Green"
                    TextWrapping="Wrap"
-                   HorizontalAlignment="Center"/>
+                   HorizontalAlignment="Center"
+                   MaxWidth="250"/>
     </StackPanel>
 </UserControl>
