@@ -8,6 +8,9 @@
              x:Class="expense_manager_30.Views.TransactionListView"
              x:DataType="vm:TransactionListViewModel">
 
+    <Design.DataContext>
+        <vm:TransactionListViewModel />
+    </Design.DataContext>
 
     <Grid Margin="20"
           RowDefinitions="Auto,Auto,Auto,Auto,*">
@@ -40,8 +43,11 @@
                     Margin="5">
             
             <ComboBox ItemsSource="{Binding Categories}" 
-                      SelectedItem="{Binding SelectedFilterCategory}" 
+                      SelectedItem="{Binding SelectedFilterCategory}"
+                      PlaceholderText="Category"
+                      Foreground="Gray"
                       MaxWidth="300"/>
+            
             
             <CheckBox Content="Income only" 
                       IsChecked="{Binding IsIncomeFilter}" 

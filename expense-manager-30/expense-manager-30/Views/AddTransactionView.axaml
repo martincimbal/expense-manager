@@ -7,7 +7,10 @@
              x:Class="expense_manager_30.Views.AddTransactionView"
              x:DataType="vm:AddTransactionViewModel">
 
-
+    <Design.DataContext>
+        <vm:AddCategoryViewModel />
+    </Design.DataContext>
+    
         <StackPanel Margin="25"
                 Spacing="20"
                 HorizontalAlignment="Left"
