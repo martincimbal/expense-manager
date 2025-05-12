@@ -97,7 +97,7 @@ public partial class EditTransactionWindowViewModel : ViewModelBase
             UserId = Session.CurrentUserId
         };
 
-        _dbService.UpdateTransaction(updatedTransaction);
+        DbService.UpdateTransaction(updatedTransaction);
         IsSaved = true;
         CloseAction?.Invoke();
     }
@@ -116,7 +116,7 @@ public partial class EditTransactionWindowViewModel : ViewModelBase
             return;
         } 
         
-        _dbService.DeleteTransaction(transactionId);
+        DbService.DeleteTransaction(transactionId);
         IsDeleted = true;
         CloseAction?.Invoke();
     }

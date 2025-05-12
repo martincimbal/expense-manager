@@ -79,8 +79,7 @@ public partial class StatisticsViewModel : ViewModelBase
     {
         if (!Session.IsLoggedIn) return;
 
-        var transactions = _dbService
-            .GetTransactions(Session.CurrentUserId)
+        var transactions = DbService.GetTransactions(Session.CurrentUserId)
             .Where(t => t.IsIncome == IsIncome)
             .OrderBy(t => t.Date)
             .ToList();
@@ -91,7 +90,7 @@ public partial class StatisticsViewModel : ViewModelBase
 
     private void UpdatePieChart(List<Transaction> transactions)
     {
-        var categories = _dbService.GetCategories(Session.CurrentUserId);
+        var categories = DbService.GetCategories(Session.CurrentUserId);
         
         PieSeries.Clear();
         foreach (var group in transactions
@@ -148,8 +147,7 @@ public partial class StatisticsViewModel : ViewModelBase
     private void UpdateLineChart()
     {
         LineSeries.Clear();
-        var allTransactions = _dbService
-            .GetTransactions(Session.CurrentUserId)
+        var allTransactions = DbService.GetTransactions(Session.CurrentUserId)
             .OrderBy(t => t.Date)
             .ToList();
 

@@ -34,9 +34,9 @@ public partial class LoginWindowViewModel : ObservableObject
 
     private void Login()
     {
-        if (_dbService.LoginUser(Username, Password))
+        if (DbService.LoginUser(Username, Password))
         {
-            var userId = _dbService.GetUserIdByUsername(Username);
+            var userId = DbService.GetUserIdByUsername(Username);
             if (userId != null)
             {
                 Session.SetUser(userId.Value, Username);

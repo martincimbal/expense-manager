@@ -34,7 +34,7 @@ public partial class AddCategoryViewModel : ViewModelBase
             return;
         }
 
-        _dbService.AddCategory(CategoryName, Session.CurrentUserId);
+        DbService.AddCategory(CategoryName, Session.CurrentUserId);
         StatusMessage = "Category added!";
         CategoryName = string.Empty;
     }

@@ -50,7 +50,7 @@ public partial class AddTransactionViewModel : ViewModelBase
             return;
         }
 
-        var loadedCategories = _dbService.GetCategories(Session.CurrentUserId);
+        var loadedCategories = DbService.GetCategories(Session.CurrentUserId);
         Categories = new ObservableCollection<Category>(loadedCategories);
     }
 
@@ -75,7 +75,7 @@ public partial class AddTransactionViewModel : ViewModelBase
         }
 
         // Convert DateTimeOffset to DateTime before passing it to the DbService
-        _dbService.AddTransaction(parsedAmount, IsIncome, Date.DateTime, Note, SelectedCategory.Id, Session.CurrentUserId);
+        DbService.AddTransaction(parsedAmount, IsIncome, Date.DateTime, Note, SelectedCategory.Id, Session.CurrentUserId);
 
         StatusMessage = "Transaction added successfully.";
         ClearForm();

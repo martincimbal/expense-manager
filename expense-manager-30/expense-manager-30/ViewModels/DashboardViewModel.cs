@@ -35,8 +35,8 @@ public partial class DashboardViewModel : ViewModelBase
     {
         if (!Session.IsLoggedIn) return;
 
-        var allTransactions = _dbService.GetTransactions(Session.CurrentUserId);
-        var categories = _dbService.GetCategories(Session.CurrentUserId);
+        var allTransactions = DbService.GetTransactions(Session.CurrentUserId);
+        var categories = DbService.GetCategories(Session.CurrentUserId);
 
         CurrentBalance = allTransactions.Sum(t => t.IsIncome ? t.Amount : -t.Amount);
         TotalTransactions = allTransactions.Count;

@@ -57,8 +57,8 @@ public partial class TransactionListViewModel : ViewModelBase
             return;
         }
 
-        var userTransactions = _dbService.GetTransactions(Session.CurrentUserId);
-        var categories = _dbService.GetCategories(Session.CurrentUserId);
+        var userTransactions = DbService.GetTransactions(Session.CurrentUserId);
+        var categories = DbService.GetCategories(Session.CurrentUserId);
 
         foreach (var transaction in userTransactions)
         {
@@ -79,7 +79,7 @@ public partial class TransactionListViewModel : ViewModelBase
         DateTime? endDate = EndDateFilter?.DateTime.Date.AddDays(1).AddSeconds(-1);
         bool? incomeFilter = IsIncomeFilter ? true : null;
 
-        var filtered = _dbService.GetFilteredTransactions(
+        var filtered = DbService.GetFilteredTransactions(
             Session.CurrentUserId,
             categoryId,
             startDate,
@@ -112,7 +112,7 @@ public partial class TransactionListViewModel : ViewModelBase
     {
         if (transaction == null) return;
 
-        _dbService.DeleteTransaction(transaction.Id);
+        DbService.DeleteTransaction(transaction.Id);
         LoadTransactions();
     }
     
@@ -120,7 +120,7 @@ public partial class TransactionListViewModel : ViewModelBase
     {
         if (transaction == null) return;
 
-        var categories = _dbService.GetCategories(Session.CurrentUserId);
+        var categories = DbService.GetCategories(Session.CurrentUserId);
 
         var editWindow = new EditTransactionWindow();
         var viewModel = new EditTransactionWindowViewModel(transaction, new ObservableCollection<Category>(categories));
