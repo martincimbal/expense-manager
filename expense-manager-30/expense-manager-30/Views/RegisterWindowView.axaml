@@ -6,9 +6,11 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="expense_manager_30.Views.RegisterWindowView"
         x:DataType="viewModels:RegisterWindowViewModel"
+        Icon="/Assets/accounting-logo.ico"
         Title="Register"
         Width="450"
-        Height="500">
+        Height="500"
+        >
     
         <Window.DataContext>
                 <viewModels:RegisterWindowViewModel/>

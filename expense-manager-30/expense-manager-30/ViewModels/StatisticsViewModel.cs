@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using expense_manager_30.Models;
 using expense_manager_30.Services;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
@@ -20,41 +17,62 @@ public partial class StatisticsViewModel : ViewModelBase
     private readonly DbService _dbService;
 
     [ObservableProperty]
-    private ObservableCollection<ISeries> pieSeries = new();
+    private ObservableCollection<ISeries> _pieSeries;
 
     [ObservableProperty]
-    private ObservableCollection<ISeries> barSeries = new();
+    private ObservableCollection<ISeries> _barSeries;
 
     [ObservableProperty]
-    private ObservableCollection<ISeries> lineSeries = new();
+    private ObservableCollection<ISeries> _lineSeries;
 
     [ObservableProperty]
-    private Axis[] barXAxis = new Axis[0];
+    private Axis[] _barXAxis = [];
 
     [ObservableProperty]
-    private Axis[] barYAxis = new Axis[0];
+    private Axis[] _barYAxis = [];
 
     [ObservableProperty]
-    private Axis[] lineXAxis = new Axis[0];
+    private Axis[] _lineXAxis = [];
 
     [ObservableProperty]
-    private Axis[] lineYAxis = new Axis[0];
+    private Axis[] _lineYAxis = [];
 
     [ObservableProperty]
-    private string summary = string.Empty;
+    private bool _isIncome;
+
+    public bool ShowIncomeCheckBox => SelectedChart != "Balance";
+
+    public List<string> AvailableCharts { get; } =
+    [
+        "Categories",
+        "Monthly Totals",
+        "Balance"
+    ];
 
     [ObservableProperty]
-    private bool isIncome = false;
+    private string _selectedChart = "Categories";
 
     public StatisticsViewModel()
     {
         _dbService = new DbService();
+        PieSeries = [];
+        BarSeries = [];
+        LineSeries = [];
+        LoadInitialData();
+    }
+
+    partial void OnIsIncomeChanged(bool value) => LoadStatistics();
+    partial void OnSelectedChartChanged(string value)
+    {
+        OnPropertyChanged(nameof(ShowIncomeCheckBox));
         LoadStatistics();
     }
 
-    partial void OnIsIncomeChanged(bool value)
+    private void LoadInitialData()
     {
+        if (!Session.IsLoggedIn) return;
         LoadStatistics();
+        UpdateLineChart();
     }
 
     private void LoadStatistics()
@@ -67,96 +85,98 @@ public partial class StatisticsViewModel : ViewModelBase
             .OrderBy(t => t.Date)
             .ToList();
 
-        var categories = _dbService.GetCategories(Session.CurrentUserId);
+        UpdatePieChart(transactions);
+        UpdateBarChart(transactions);
+    }
 
-        // Pie Chart
-        var grouped = transactions
+    private void UpdatePieChart(List<Transaction> transactions)
+    {
+        var categories = _dbService.GetCategories(Session.CurrentUserId);
+        
+        PieSeries.Clear();
+        foreach (var group in transactions
             .GroupBy(t => t.CategoryId)
             .Select(g => new
             {
                 Category = categories.FirstOrDefault(c => c.Id == g.Key)?.Name ?? "Unknown",
                 Sum = g.Sum(t => t.Amount)
-            })
-            .ToList();
-
-        PieSeries = new ObservableCollection<ISeries>(
-            grouped.Select(g => new PieSeries<decimal>
+            }))
+        {
+            PieSeries.Add(new PieSeries<decimal>
             {
-                Values = new[] { g.Sum },
-                Name = g.Category
-            }));
+                Values = [group.Sum],
+                Name = group.Category
+            });
+        }
+    }
 
-        // Bar Chart (Monthly Totals)
+    private void UpdateBarChart(List<Transaction> transactions)
+    {
+        BarSeries.Clear();
         var byMonth = transactions
             .GroupBy(t => new { t.Date.Year, t.Date.Month })
-            .OrderBy(g => g.Key.Year).ThenBy(g => g.Key.Month)
+            .OrderBy(g => g.Key.Year)
+            .ThenBy(g => g.Key.Month)
             .ToList();
 
-        var monthLabels = byMonth
-            .Select(g => $"{CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(g.Key.Month)} {g.Key.Year}")
-            .ToList();
-
-        var monthValues = byMonth.Select(g => g.Sum(t => t.Amount)).ToList();
-
-        BarSeries = new ObservableCollection<ISeries>
-        {
-            new ColumnSeries<decimal>
-            {
-                Values = monthValues,
-                Name = "Monthly Total",
-                Stroke = null,
-                Fill = new SolidColorPaint(SKColors.SteelBlue)
-            }
-        };
-
-        BarXAxis = new[]
-        {
-            new Axis { Labels = monthLabels, Name = "Month" }
-        };
-        BarYAxis = new[]
-        {
+        BarYAxis =
+        [
             new Axis { Name = "Amount" }
-        };
+        ];
 
-        // Line Chart (Cumulative Balance)
-        decimal runningTotal = 0;
-        var cumulativeValues = new List<decimal>();
-        foreach (var t in transactions)
+        BarXAxis =
+        [
+            new Axis 
+            { 
+                Labels = byMonth
+                    .Select(g => $"{CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(g.Key.Month)} {g.Key.Year}")
+                    .ToList(), 
+                Name = "Month" 
+            }
+        ];
+    
+        BarSeries.Add(new ColumnSeries<decimal>
         {
-            runningTotal += t.Amount;
-            cumulativeValues.Add(runningTotal);
+            Values = byMonth
+                .Select(g => g.Sum(t => t.Amount))
+                .ToList(),
+            Name = "Monthly Total",
+            Stroke = null,
+            Fill = new SolidColorPaint(SKColors.SteelBlue)
+        });
+    }
+    private void UpdateLineChart()
+    {
+        LineSeries.Clear();
+        var allTransactions = _dbService
+            .GetTransactions(Session.CurrentUserId)
+            .OrderBy(t => t.Date)
+            .ToList();
+
+        decimal runningBalance = 0;
+        var balanceValues = new List<decimal>();
+        var balanceLabels = new List<string>();
+
+        foreach (var t in allTransactions)
+        {
+            runningBalance += t.IsIncome ? t.Amount : -t.Amount;
+            balanceValues.Add(runningBalance);
+            balanceLabels.Add(t.Date.ToString("d.M."));
         }
 
-        var lineLabels = transactions.Select(t => t.Date.ToString("d.M.")).ToList();
+        LineYAxis =
+        [
+            new Axis { Name = "Balance" }
+        ];
 
-        LineSeries = new ObservableCollection<ISeries>
+        LineSeries.Add(new LineSeries<decimal>
         {
-            new LineSeries<decimal>
-            {
-                Values = cumulativeValues,
-                GeometrySize = 6,
-                Name = "Cumulative Balance",
-                Fill = null,
-                Stroke = new SolidColorPaint(SKColors.DarkOliveGreen, 2)
-            }
-        };
+            Values = balanceValues,
+            GeometrySize = 6,
+            Name = "Account Balance",
+            Fill = null,
+            Stroke = new SolidColorPaint(SKColors.DarkOliveGreen, 2)
+        });
 
-        LineXAxis = new[] { new Axis { Labels = lineLabels, Name = "Date", LabelsRotation = 45 } };
-        LineYAxis = new[] { new Axis { Name = "Balance" } };
-
-        var total = transactions.Sum(t => t.Amount);
-        var avg = transactions.Any() ? transactions.Average(t => t.Amount) : 0;
-
-        Summary = $"{(IsIncome ? "Incomes" : "Expenses")} total: {total:C}, average: {avg:C}";
-    }
-    
-    public List<string> AvailableCharts { get; } = new()
-    {
-        "Categories",
-        "Monthly Totals",
-        "Cumulative Balance"
-    };
-
-    [ObservableProperty]
-    private string _selectedChart = "Categories";
-}
+        LineXAxis = [new Axis { Labels = balanceLabels, Name = "Date", LabelsRotation = 45 }];
+    }}

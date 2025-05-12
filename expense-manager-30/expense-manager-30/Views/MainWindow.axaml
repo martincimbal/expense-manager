@@ -6,8 +6,9 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="expense_manager_30.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/accounting-logo.ico"
         Width="1200"
+        Height="700"
         Title="Expense Manager">
     
     <Design.DataContext>

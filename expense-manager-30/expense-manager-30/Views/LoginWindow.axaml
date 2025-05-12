@@ -6,6 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
         x:Class="expense_manager_30.Views.LoginWindow"
         x:DataType="viewModels:LoginWindowViewModel"
+        Icon="/Assets/accounting-logo.ico"
         Title="Login"
         Width="450"
         Height="500">

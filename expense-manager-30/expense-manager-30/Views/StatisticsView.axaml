@@ -21,26 +21,28 @@
     <ScrollViewer x:Name="MainScrollViewer">
         <StackPanel Margin="20"
                     Spacing="15">
-
+            <!-- ZMĚNA: CheckBox vedle ComboBox -->
             <TextBlock Text="Transaction Statistics" FontSize="22" FontWeight="Bold"/>
-            <ComboBox ItemsSource="{Binding AvailableCharts}" 
-                      SelectedItem="{Binding SelectedChart}"
-                      Margin="0,0,0,20"
-                      Width="200"
-                      HorizontalAlignment="Left"/>
-
-            <Border IsVisible="{Binding SelectedChart, 
-                    Converter={StaticResource StringEqualityConverter}, 
-                    ConverterParameter='Categories'}">
+            <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,0,20">
+                <ComboBox ItemsSource="{Binding AvailableCharts}" 
+                          SelectedItem="{Binding SelectedChart}"
+                          Width="200"/>
+                <!-- ZMĚNA: Přidán IsVisible a TwoWay binding -->
+                <CheckBox Content="Show incomes" 
+                          IsChecked="{Binding IsIncome, Mode=TwoWay}"
+                          IsVisible="{Binding ShowIncomeCheckBox}"
+                          VerticalAlignment="Center"/>
+            </StackPanel>
+            
+            <!-- Zbytek zůstává stejný -->
+            <Border IsVisible="{Binding SelectedChart, Converter={StaticResource StringEqualityConverter}, ConverterParameter='Categories'}">
                 <avalonia:PieChart
                     Series="{Binding PieSeries}"
                     Height="400"
                     LegendPosition="Right"/>
             </Border>
 
-            <Border IsVisible="{Binding SelectedChart, 
-                    Converter={StaticResource StringEqualityConverter}, 
-                    ConverterParameter='Monthly Totals'}">
+            <Border IsVisible="{Binding SelectedChart, Converter={StaticResource StringEqualityConverter}, ConverterParameter='Monthly Totals'}">
                 <avalonia:CartesianChart
                     Series="{Binding BarSeries}"
                     Height="300"
@@ -48,9 +50,7 @@
                     YAxes="{Binding BarYAxis}"/>
             </Border>
 
-            <Border IsVisible="{Binding SelectedChart, 
-                    Converter={StaticResource StringEqualityConverter}, 
-                    ConverterParameter='Cumulative Balance'}">
+            <Border IsVisible="{Binding SelectedChart, Converter={StaticResource StringEqualityConverter}, ConverterParameter='Balance'}">
                 <avalonia:CartesianChart 
                     Series="{Binding LineSeries}" 
                     Height="300"

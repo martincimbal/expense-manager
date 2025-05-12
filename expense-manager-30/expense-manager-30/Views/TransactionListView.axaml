@@ -58,7 +58,8 @@
         
         <DataGrid ItemsSource="{Binding Transactions}"
                   AutoGenerateColumns="False"
-                  x:Name="MyDataGrid">
+                  x:Name="MyDataGrid"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
             
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date"
