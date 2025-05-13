@@ -6,39 +6,39 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="expense_manager_30.Views.AddCategoryView"
              x:DataType="vm:AddCategoryViewModel">
-    
+
     <StackPanel Margin="20"
                 Spacing="15"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 Width="300">
-        
+
         <TextBlock Text="Add New Category"
                    FontSize="22"
                    FontWeight="Bold"
                    HorizontalAlignment="Center"
-                   Margin="0,0,0,20"/>
-        
+                   Margin="0,0,0,20" />
+
         <StackPanel Spacing="8">
             <TextBlock Text="Category Name:"
-                       FontWeight="SemiBold"/>
-            
+                       FontWeight="SemiBold" />
+
             <TextBox Watermark="Enter category name"
                      Text="{Binding CategoryName}"
-                     Width="250"/>
-            
+                     Width="250" />
+
             <Button Content="Add Category"
                     Command="{Binding AddCategoryCommand}"
                     HorizontalAlignment="Center"
                     Padding="10,5"
                     Margin="0,10,0,0"
-                    MinWidth="120"/>
+                    MinWidth="120" />
         </StackPanel>
-        
+
         <TextBlock Text="{Binding StatusMessage}"
                    Foreground="Green"
                    TextWrapping="Wrap"
                    HorizontalAlignment="Center"
-                   MaxWidth="250"/>
+                   MaxWidth="250" />
     </StackPanel>
 </UserControl>

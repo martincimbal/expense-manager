@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,41 +12,40 @@ using expense_manager_30.Views;
 
 namespace expense_manager_30.ViewModels;
 
-
 public partial class TransactionListViewModel : ViewModelBase
 {
-    private readonly DbService _dbService;
+    private readonly DbService _database;
 
-    [ObservableProperty] private ObservableCollection<Transaction> transactions = new();
+    [ObservableProperty] private ObservableCollection<Category> _categories = [];
 
-    [ObservableProperty] private string statusMessage = string.Empty;
+    [ObservableProperty] private DateTimeOffset? _endDateFilter;
 
-    [ObservableProperty] private Category? selectedFilterCategory;
+    [ObservableProperty] private bool _isIncomeFilter;
 
-    [ObservableProperty] private ObservableCollection<Category> categories = new();
+    [ObservableProperty] private string? _noteFilter;
 
-    [ObservableProperty] private bool isIncomeFilter;
+    [ObservableProperty] private Category? _selectedFilterCategory;
 
-    [ObservableProperty] private string? noteFilter = null;
+    [ObservableProperty] private DateTimeOffset? _startDateFilter;
 
-    [ObservableProperty] private DateTimeOffset? startDateFilter;
+    [ObservableProperty] private string _statusMessage = string.Empty;
 
-    [ObservableProperty] private DateTimeOffset? endDateFilter;
-
-    public ICommand ApplyFilterCommand { get; }
-    public ICommand ClearFilterCommand { get; }
-    public ICommand DeleteTransactionCommand { get; }
-    public ICommand EditTransactionCommand { get; }
+    [ObservableProperty] private ObservableCollection<Transaction> _transactions = [];
 
     public TransactionListViewModel()
     {
-        _dbService = new DbService();
+        _database = new DbService();
         ApplyFilterCommand = new RelayCommand(ApplyFilter);
         ClearFilterCommand = new RelayCommand(ClearFilter);
         DeleteTransactionCommand = new RelayCommand<Transaction>(DeleteTransaction);
         EditTransactionCommand = new RelayCommand<Transaction>(EditTransaction);
         LoadTransactions();
     }
+
+    public ICommand ApplyFilterCommand { get; }
+    public ICommand ClearFilterCommand { get; }
+    public ICommand DeleteTransactionCommand { get; }
+    public ICommand EditTransactionCommand { get; }
 
     [RelayCommand]
     private void LoadTransactions()
@@ -57,8 +57,8 @@ public partial class TransactionListViewModel : ViewModelBase
             return;
         }
 
-        var userTransactions = DbService.GetTransactions(Session.CurrentUserId);
-        var categories = DbService.GetCategories(Session.CurrentUserId);
+        var userTransactions = _database.GetTransactions(Session.CurrentUserId);
+        var categories = _database.GetCategories(Session.CurrentUserId);
 
         foreach (var transaction in userTransactions)
         {
@@ -75,11 +75,11 @@ public partial class TransactionListViewModel : ViewModelBase
         if (!Session.IsLoggedIn) return;
 
         var categoryId = SelectedFilterCategory?.Id;
-        DateTime? startDate = StartDateFilter?.DateTime.Date;
-        DateTime? endDate = EndDateFilter?.DateTime.Date.AddDays(1).AddSeconds(-1);
+        var startDate = StartDateFilter?.DateTime.Date;
+        var endDate = EndDateFilter?.DateTime.Date.AddDays(1).AddSeconds(-1);
         bool? incomeFilter = IsIncomeFilter ? true : null;
 
-        var filtered = DbService.GetFilteredTransactions(
+        var filtered = _database.GetFilteredTransactions(
             Session.CurrentUserId,
             categoryId,
             startDate,
@@ -103,45 +103,39 @@ public partial class TransactionListViewModel : ViewModelBase
         SelectedFilterCategory = null;
         StartDateFilter = null;
         EndDateFilter = null;
-        isIncomeFilter = false;
+        IsIncomeFilter = false;
         NoteFilter = null;
         LoadTransactions();
     }
 
-    private void DeleteTransaction(Transaction transaction)
+    private void DeleteTransaction(Transaction? transaction)
     {
         if (transaction == null) return;
 
-        DbService.DeleteTransaction(transaction.Id);
+        _database.DeleteTransaction(transaction.Id);
         LoadTransactions();
     }
-    
-    private async void EditTransaction(Transaction transaction)
+
+    private async void EditTransaction(Transaction? transaction)
     {
         if (transaction == null) return;
 
-        var categories = DbService.GetCategories(Session.CurrentUserId);
+        var categories = _database.GetCategories(Session.CurrentUserId);
 
         var editWindow = new EditTransactionWindow();
-        var viewModel = new EditTransactionWindowViewModel(transaction, new ObservableCollection<Category>(categories));
-        viewModel.CloseAction = () => editWindow.Close();
+        var viewModel = new EditTransactionWindowViewModel(transaction, new ObservableCollection<Category>(categories))
+            {
+                CloseAction = () => editWindow.Close()
+            };
 
         editWindow.DataContext = viewModel;
 
-        var lifetime = Avalonia.Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
+        var lifetime = Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
         var ownerWindow = lifetime?.Windows.FirstOrDefault(w => w.IsActive);
 
-        if (ownerWindow != null)
-        {
-            await editWindow.ShowDialog(ownerWindow);
+        if (ownerWindow == null) return;
+        await editWindow.ShowDialog(ownerWindow);
 
-            if (viewModel.IsSaved || viewModel.IsDeleted)
-            {
-                LoadTransactions();
-            }
-        }
+        if (viewModel.IsSaved || viewModel.IsDeleted) LoadTransactions();
     }
-
-
-
 }

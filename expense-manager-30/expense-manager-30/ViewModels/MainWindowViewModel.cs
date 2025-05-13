@@ -4,11 +4,15 @@ namespace expense_manager_30.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    [ObservableProperty]
-    private int selectedIndex;
+    [ObservableProperty] private object? _currentPage;
 
-    [ObservableProperty]
-    private object? currentPage;
+    [ObservableProperty] private int _selectedIndex;
+
+    public MainWindowViewModel()
+    {
+        SelectedIndex = 0;
+        CurrentPage = new DashboardViewModel();
+    }
 
     partial void OnSelectedIndexChanged(int value)
     {
@@ -18,17 +22,11 @@ public partial class MainWindowViewModel : ViewModelBase
             1 => new TransactionListViewModel(),
             2 => new AddTransactionViewModel(),
             3 => new AddCategoryViewModel(),
-            _ => new StatisticsViewModel(),
+            _ => new StatisticsViewModel()
             // 3 => new CategoryManagementViewModel(),
             // 4 => new ImportExportViewModel(),
             // 5 => new LogoutViewModel(),
             // _ => CurrentPage
         };
-    }
-
-    public MainWindowViewModel()
-    {
-        SelectedIndex = 0;
-        CurrentPage = new DashboardViewModel();
     }
 }

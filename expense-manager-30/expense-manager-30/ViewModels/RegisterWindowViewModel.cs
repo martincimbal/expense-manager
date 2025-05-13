@@ -10,29 +10,26 @@ public partial class RegisterWindowViewModel : ObservableObject
 {
     private readonly DbService _dbService;
 
+    [ObservableProperty] private string _confirmPassword = string.Empty;
+
+    [ObservableProperty] private string _errorMessage = string.Empty;
+
+    [ObservableProperty] private string _password = string.Empty;
+
+    [ObservableProperty] private string _username = string.Empty;
+
     public RegisterWindowViewModel()
     {
         _dbService = new DbService();
         RegisterCommand = new RelayCommand(RegisterUser);
     }
 
-    [ObservableProperty] 
-    private string _username;
-
-    [ObservableProperty] 
-    private string _password;
-
-    [ObservableProperty] 
-    private string _confirmPassword;
-
-    [ObservableProperty] 
-    private string _errorMessage;
-
     public ICommand RegisterCommand { get; }
 
     private void RegisterUser()
     {
-        if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(ConfirmPassword))
+        if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password) ||
+            string.IsNullOrWhiteSpace(ConfirmPassword))
         {
             ErrorMessage = "All fields are required.";
             return;

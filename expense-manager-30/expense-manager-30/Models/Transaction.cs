@@ -12,6 +12,6 @@ public class Transaction
     public int CategoryId { get; set; }
     public int UserId { get; set; }
     public string? CategoryName { get; set; }
-    
+
     public string FormattedDate => Date.ToString("dd.MM.yyyy");
 }

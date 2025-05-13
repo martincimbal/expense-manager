@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:expense_manager_30.ViewModels"
-             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="expense_manager_30.Views.TransactionListView"
              x:DataType="vm:TransactionListViewModel">
@@ -15,100 +14,98 @@
     <Grid Margin="20"
           RowDefinitions="Auto,Auto,Auto,Auto,*">
 
-        <TextBlock Text="All Transactions" 
-                   FontSize="20" 
+        <TextBlock Text="All Transactions"
+                   FontSize="20"
                    FontWeight="Bold"
-                   Grid.Row="0"/>
-        
-        <StackPanel Orientation="Horizontal" 
+                   Grid.Row="0" />
+
+        <StackPanel Orientation="Horizontal"
                     Spacing="10"
                     Grid.Row="1"
                     Margin="10">
             <TextBlock Text="From:"
-                       VerticalAlignment="Center"/>
-            
+                       VerticalAlignment="Center" />
+
             <DatePicker SelectedDate="{Binding StartDateFilter}"
-                        Width="300"/>
-            
+                        Width="300" />
+
             <TextBlock Text="To:"
-                       VerticalAlignment="Center"/>
-            
+                       VerticalAlignment="Center" />
+
             <DatePicker SelectedDate="{Binding EndDateFilter}"
-                        Width="300"/>
+                        Width="300" />
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" 
+        <StackPanel Orientation="Horizontal"
                     Spacing="10"
                     Grid.Row="2"
                     Margin="5">
-            
-            <ComboBox ItemsSource="{Binding Categories}" 
+
+            <ComboBox ItemsSource="{Binding Categories}"
                       SelectedItem="{Binding SelectedFilterCategory}"
                       PlaceholderText="Category"
                       Foreground="Gray"
-                      MaxWidth="300"/>
-            
-            
-            <CheckBox Content="Income only" 
-                      IsChecked="{Binding IsIncomeFilter}" 
-                      VerticalAlignment="Center"/>
-            
-            <TextBox Width="150" 
-                     Text="{Binding NoteFilter}" 
-                     Watermark="Note contains..."/>
-            
-            <Button Content="Filter" Command="{Binding ApplyFilterCommand}"/>
-            
-            <Button Content="Clear" Command="{Binding ClearFilterCommand}"/>
+                      MaxWidth="300" />
+
+
+            <CheckBox Content="Income only"
+                      IsChecked="{Binding IsIncomeFilter}"
+                      VerticalAlignment="Center" />
+
+            <TextBox Width="150"
+                     Text="{Binding NoteFilter}"
+                     Watermark="Note contains..." />
+
+            <Button Content="Filter" Command="{Binding ApplyFilterCommand}" />
+
+            <Button Content="Clear" Command="{Binding ClearFilterCommand}" />
         </StackPanel>
 
-        <TextBlock Text="{Binding StatusMessage}" 
+        <TextBlock Text="{Binding StatusMessage}"
                    Foreground="Green"
                    Grid.Row="3"
-                   Margin="5"/>
-        
-            
+                   Margin="5" />
+
+
         <DataGrid Grid.Row="4"
-                  ItemsSource="{Binding Transactions}" 
+                  ItemsSource="{Binding Transactions}"
                   AutoGenerateColumns="False"
                   HeadersVisibility="Column"
                   VerticalScrollBarVisibility="Auto"
                   x:Name="MyDataGrid">
-            
+
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" 
-                                    Binding="{Binding FormattedDate}" 
-                                    Width="150"/>
-                
-                <DataGridTextColumn Header="Amount" 
-                                    Binding="{Binding Amount}" 
-                                    Width="*"/>
-                
-                <DataGridCheckBoxColumn Header="Income" 
-                                        Binding="{Binding IsIncome}" 
-                                        Width="90"/>
-                
-                <DataGridTextColumn Header="Category" 
-                                    Binding="{Binding CategoryName}" 
-                                    Width="*"/>
-                
-                <DataGridTextColumn Header="Note" 
-                                    Binding="{Binding Note}" 
-                                    Width="*"/>
-                
+                <DataGridTextColumn Header="Date"
+                                    Binding="{Binding FormattedDate}"
+                                    Width="150" />
+
+                <DataGridTextColumn Header="Amount"
+                                    Binding="{Binding Amount}"
+                                    Width="*" />
+
+                <DataGridCheckBoxColumn Header="Income"
+                                        Binding="{Binding IsIncome}"
+                                        Width="90" />
+
+                <DataGridTextColumn Header="Category"
+                                    Binding="{Binding CategoryName}"
+                                    Width="*" />
+
+                <DataGridTextColumn Header="Note"
+                                    Binding="{Binding Note}"
+                                    Width="*" />
+
                 <DataGridTemplateColumn Header="Action">
-                    <DataGridTemplateColumn.CellTemplate> 
-                        <DataTemplate> 
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
                             <Button Content="Edit"
                                     Command="{Binding #MyDataGrid.((vm:TransactionListViewModel)DataContext).EditTransactionCommand}"
                                     CommandParameter="{Binding}"
-                                    Width="70"/> 
-                        </DataTemplate> 
-                    </DataGridTemplateColumn.CellTemplate> 
+                                    Width="70" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
 </UserControl>
-
-

@@ -10,37 +10,30 @@ namespace expense_manager_30.ViewModels;
 
 public partial class AddTransactionViewModel : ViewModelBase
 {
-    private readonly DbService _dbService;
+    private readonly DbService _database;
 
-    [ObservableProperty]
-    private string amount = string.Empty;
+    [ObservableProperty] private string _amount = string.Empty;
 
-    [ObservableProperty]
-    private bool isIncome;
+    [ObservableProperty] private ObservableCollection<Category> _categories = [];
 
-    [ObservableProperty]
-    private DateTimeOffset date = DateTimeOffset.Now;
+    [ObservableProperty] private DateTimeOffset _date = DateTimeOffset.Now;
 
-    [ObservableProperty]
-    private string note = string.Empty;
+    [ObservableProperty] private bool _isIncome;
 
-    [ObservableProperty]
-    private ObservableCollection<Category> categories = new();
+    [ObservableProperty] private string _note = string.Empty;
 
-    [ObservableProperty]
-    private Category? selectedCategory;
+    [ObservableProperty] private Category? _selectedCategory;
 
-    [ObservableProperty]
-    private string statusMessage = string.Empty;
-
-    public ICommand AddTransactionCommand { get; }
+    [ObservableProperty] private string _statusMessage = string.Empty;
 
     public AddTransactionViewModel()
     {
-        _dbService = new DbService();
+        _database = new DbService();
         AddTransactionCommand = new RelayCommand(AddTransaction);
         LoadCategories();
     }
+
+    public ICommand AddTransactionCommand { get; }
 
     private void LoadCategories()
     {
@@ -50,7 +43,7 @@ public partial class AddTransactionViewModel : ViewModelBase
             return;
         }
 
-        var loadedCategories = DbService.GetCategories(Session.CurrentUserId);
+        var loadedCategories = _database.GetCategories(Session.CurrentUserId);
         Categories = new ObservableCollection<Category>(loadedCategories);
     }
 
@@ -75,7 +68,8 @@ public partial class AddTransactionViewModel : ViewModelBase
         }
 
         // Convert DateTimeOffset to DateTime before passing it to the DbService
-        DbService.AddTransaction(parsedAmount, IsIncome, Date.DateTime, Note, SelectedCategory.Id, Session.CurrentUserId);
+        _database.AddTransaction(parsedAmount, IsIncome, Date.DateTime, Note, SelectedCategory.Id,
+            Session.CurrentUserId);
 
         StatusMessage = "Transaction added successfully.";
         ClearForm();

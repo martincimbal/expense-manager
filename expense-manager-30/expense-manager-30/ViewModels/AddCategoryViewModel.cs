@@ -6,18 +6,11 @@ namespace expense_manager_30.ViewModels;
 
 public partial class AddCategoryViewModel : ViewModelBase
 {
-    private readonly DbService _dbService;
+    private readonly DbService _database = new();
 
-    [ObservableProperty]
-    private string categoryName = string.Empty;
+    [ObservableProperty] private string _categoryName = string.Empty;
 
-    [ObservableProperty]
-    private string statusMessage = string.Empty;
-
-    public AddCategoryViewModel()
-    {
-        _dbService = new DbService();
-    }
+    [ObservableProperty] private string _statusMessage = string.Empty;
 
     [RelayCommand]
     private void AddCategory()
@@ -34,7 +27,7 @@ public partial class AddCategoryViewModel : ViewModelBase
             return;
         }
 
-        DbService.AddCategory(CategoryName, Session.CurrentUserId);
+        _database.AddCategory(CategoryName, Session.CurrentUserId);
         StatusMessage = "Category added!";
         CategoryName = string.Empty;
     }

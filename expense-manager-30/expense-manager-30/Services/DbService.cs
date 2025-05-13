@@ -18,8 +18,8 @@ public class DbService
         SQLiteConnection.CreateFile(DbFilePath);
         CreateTables();
     }
-    
-    private static void CreateTables()
+
+    private void CreateTables()
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -90,7 +90,8 @@ public class DbService
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
 
-        const string query = "INSERT INTO Users (Username, PasswordHash, Salt) VALUES (@Username, @PasswordHash, @Salt)";
+        const string query =
+            "INSERT INTO Users (Username, PasswordHash, Salt) VALUES (@Username, @PasswordHash, @Salt)";
         using var command = new SQLiteCommand(query, connection);
         command.Parameters.AddWithValue("@Username", username);
         command.Parameters.AddWithValue("@PasswordHash", passwordHash);
@@ -98,8 +99,8 @@ public class DbService
 
         command.ExecuteNonQuery();
     }
-    
-    public static bool LoginUser(string username, string password)
+
+    public bool LoginUser(string username, string password)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -119,7 +120,7 @@ public class DbService
         return storedHash == passwordHash;
     }
 
-    public static void AddCategory(string categoryName, int? userId)
+    public void AddCategory(string categoryName, int? userId)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -131,8 +132,8 @@ public class DbService
 
         command.ExecuteNonQuery();
     }
-    
-    public static void AddTransaction(decimal amount, bool isIncome, DateTime date, string? note, int categoryId, int userId)
+
+    public void AddTransaction(decimal amount, bool isIncome, DateTime date, string? note, int categoryId, int userId)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -150,8 +151,8 @@ public class DbService
 
         command.ExecuteNonQuery();
     }
-    
-    public static List<Transaction> GetTransactions(int userId)
+
+    public List<Transaction> GetTransactions(int userId)
     {
         var transactions = new List<Transaction>();
 
@@ -164,7 +165,6 @@ public class DbService
 
         using var reader = command.ExecuteReader();
         while (reader.Read())
-        {
             transactions.Add(new Transaction
             {
                 Id = reader.GetInt32(0),
@@ -175,12 +175,11 @@ public class DbService
                 CategoryId = reader.GetInt32(5),
                 UserId = reader.GetInt32(6)
             });
-        }
 
         return transactions;
     }
 
-    public static List<Category> GetCategories(int userId)
+    public List<Category> GetCategories(int userId)
     {
         var categories = new List<Category>();
 
@@ -193,25 +192,23 @@ public class DbService
 
         using var reader = command.ExecuteReader();
         while (reader.Read())
-        {
             categories.Add(new Category
             {
                 Id = reader.GetInt32(0),
                 Name = reader.GetString(1),
                 UserId = reader.GetInt32(2)
             });
-        }
-        
+
         return categories;
     }
 
-    public static List<Transaction> GetFilteredTransactions(
-            int userId,
-            int? categoryId = null,
-            DateTime? startDate = null,
-            DateTime? endDate = null,
-            bool? isIncomeOnly = null,
-            string? noteContains = null)
+    public List<Transaction> GetFilteredTransactions(
+        int userId,
+        int? categoryId = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null,
+        bool? isIncomeOnly = null,
+        string? noteContains = null)
     {
         var transactions = new List<Transaction>();
 
@@ -221,7 +218,7 @@ public class DbService
         var query = "SELECT * FROM Transactions WHERE UserId = @UserId";
         var parameters = new List<SQLiteParameter>
         {
-            new SQLiteParameter("@UserId", userId)
+            new("@UserId", userId)
         };
 
         if (categoryId.HasValue)
@@ -259,7 +256,6 @@ public class DbService
 
         using var reader = command.ExecuteReader();
         while (reader.Read())
-        {
             transactions.Add(new Transaction
             {
                 Id = reader.GetInt32(0),
@@ -270,10 +266,8 @@ public class DbService
                 CategoryId = reader.GetInt32(5),
                 UserId = reader.GetInt32(6)
             });
-        }
         return transactions;
     }
-
 
 
     public (decimal totalIncome, decimal totalExpenses) GetBalance(int userId)
@@ -302,8 +296,8 @@ public class DbService
 
         return (totalIncome, totalExpenses);
     }
-    
-    public static int? GetUserIdByUsername(string username)
+
+    public int? GetUserIdByUsername(string username)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -313,14 +307,12 @@ public class DbService
         command.Parameters.AddWithValue("@Username", username);
 
         using var reader = command.ExecuteReader();
-        if (reader.Read())
-        {
-            return reader.GetInt32(0);
-        }
+        if (reader.Read()) return reader.GetInt32(0);
 
         return null;
     }
-    public static void DeleteTransaction(int transactionId)
+
+    public void DeleteTransaction(int transactionId)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -330,7 +322,7 @@ public class DbService
         command.ExecuteNonQuery();
     }
 
-    public static void UpdateTransaction(Transaction transaction)
+    public void UpdateTransaction(Transaction transaction)
     {
         using var conn = new SQLiteConnection($"Data Source={DbFilePath};");
         conn.Open();
@@ -354,5 +346,4 @@ public class DbService
 
         cmd.ExecuteNonQuery();
     }
-
 }

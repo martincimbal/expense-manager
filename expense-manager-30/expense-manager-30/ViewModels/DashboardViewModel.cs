@@ -10,20 +10,21 @@ namespace expense_manager_30.ViewModels;
 
 public partial class DashboardViewModel : ViewModelBase
 {
-    private readonly DbService _dbService;
+    private readonly DbService _database;
 
-    [ObservableProperty] private decimal currentBalance;
-    [ObservableProperty] private decimal lastMonthBalance;
-    [ObservableProperty] private int totalTransactions;
-    [ObservableProperty] private int lastMonthTransactions;
-    [ObservableProperty] private ObservableCollection<string> topCategories = new();
+    [ObservableProperty] private decimal _currentBalance;
 
-    public ICommand GoToTransactionsCommand { get; }
-    public ICommand GoToStatisticsCommand { get; }
+    [ObservableProperty] private decimal _lastMonthBalance;
+
+    [ObservableProperty] private int _lastMonthTransactions;
+
+    [ObservableProperty] private ObservableCollection<string> _topCategories = [];
+
+    [ObservableProperty] private int _totalTransactions;
 
     public DashboardViewModel()
     {
-        _dbService = new DbService();
+        _database = new DbService();
 
         GoToTransactionsCommand = new RelayCommand(GoToTransactions);
         GoToStatisticsCommand = new RelayCommand(GoToStatistics);
@@ -31,12 +32,15 @@ public partial class DashboardViewModel : ViewModelBase
         LoadDashboardData();
     }
 
+    public ICommand GoToTransactionsCommand { get; }
+    public ICommand GoToStatisticsCommand { get; }
+
     private void LoadDashboardData()
     {
         if (!Session.IsLoggedIn) return;
 
-        var allTransactions = DbService.GetTransactions(Session.CurrentUserId);
-        var categories = DbService.GetCategories(Session.CurrentUserId);
+        var allTransactions = _database.GetTransactions(Session.CurrentUserId);
+        var categories = _database.GetCategories(Session.CurrentUserId);
 
         CurrentBalance = allTransactions.Sum(t => t.IsIncome ? t.Amount : -t.Amount);
         TotalTransactions = allTransactions.Count;

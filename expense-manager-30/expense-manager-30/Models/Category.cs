@@ -2,10 +2,12 @@ namespace expense_manager_30.Models;
 
 public class Category
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public bool IsIncome { get; set; }
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
     public int UserId { get; set; }
-    
-    public override string ToString() => Name;
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }

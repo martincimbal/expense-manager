@@ -1,6 +1,4 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using expense_manager_30.ViewModels;
 
 namespace expense_manager_30.Views;
@@ -11,9 +9,6 @@ public partial class EditTransactionWindow : Window
     {
         InitializeComponent();
 
-        if (DataContext is EditTransactionWindowViewModel vm)
-        {
-            vm.CloseAction = Close;
-        }
+        if (DataContext is EditTransactionWindowViewModel vm) vm.CloseAction = Close;
     }
 }

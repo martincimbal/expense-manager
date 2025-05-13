@@ -10,74 +10,74 @@
     <Design.DataContext>
         <vm:AddCategoryViewModel />
     </Design.DataContext>
-    
-        <StackPanel Margin="25"
+
+    <StackPanel Margin="25"
                 Spacing="20"
                 HorizontalAlignment="Left"
                 MinWidth="350">
-        
+
         <TextBlock Text="Add Transaction"
                    FontSize="22"
                    FontWeight="Bold"
-                   Margin="0,0,0,20"/>
-        
+                   Margin="0,0,0,20" />
+
         <Grid ColumnDefinitions="120,*"
               RowDefinitions="auto,auto,auto,auto,auto,auto">
-            
+
             <TextBlock Text="Amount:"
                        Grid.Row="0" Grid.Column="0"
                        VerticalAlignment="Center"
-                       Margin="0,0,0,8"/>
+                       Margin="0,0,0,8" />
             <TextBox Text="{Binding Amount}"
                      Grid.Row="0" Grid.Column="1"
                      MinWidth="300"
-                     Margin="0,0,0,15"/>
-            
+                     Margin="0,0,0,15" />
+
             <CheckBox IsChecked="{Binding IsIncome}"
                       Content="Is Income?"
                       Grid.Row="1" Grid.Column="1"
-                      Margin="0,0,0,15"/>
-            
+                      Margin="0,0,0,15" />
+
             <TextBlock Text="Date:"
                        Grid.Row="2" Grid.Column="0"
                        VerticalAlignment="Center"
-                       Margin="0,0,0,8"/>
+                       Margin="0,0,0,8" />
             <DatePicker SelectedDate="{Binding Date}"
-                       Grid.Row="2" Grid.Column="1"
-                       MinWidth="300"
-                       Margin="0,0,0,15"/>
-            
+                        Grid.Row="2" Grid.Column="1"
+                        MinWidth="300"
+                        Margin="0,0,0,15" />
+
             <TextBlock Text="Note:"
                        Grid.Row="3" Grid.Column="0"
                        VerticalAlignment="Center"
-                       Margin="0,0,0,8"/>
+                       Margin="0,0,0,8" />
             <TextBox Text="{Binding Note}"
                      Grid.Row="3" Grid.Column="1"
                      MinWidth="300"
-                     Margin="0,0,0,15"/>
-            
+                     Margin="0,0,0,15" />
+
             <TextBlock Text="Category:"
                        Grid.Row="4" Grid.Column="0"
                        VerticalAlignment="Center"
-                       Margin="0,0,0,8"/>
+                       Margin="0,0,0,8" />
             <ComboBox ItemsSource="{Binding Categories}"
                       SelectedItem="{Binding SelectedCategory}"
                       Grid.Row="4" Grid.Column="1"
                       MinWidth="300"
-                      Margin="0,0,0,15"/>
+                      Margin="0,0,0,15" />
         </Grid>
-        
+
         <Button Content="Add Transaction"
                 Command="{Binding AddTransactionCommand}"
                 HorizontalAlignment="Center"
                 Padding="15,7"
                 Margin="0,20,0,0"
-                MinWidth="150"/>
-        
+                MinWidth="150" />
+
         <TextBlock Text="{Binding StatusMessage}"
                    Foreground="Green"
                    TextWrapping="Wrap"
                    HorizontalAlignment="Center"
-                   Margin="0,8,0,0"/>
+                   Margin="0,8,0,0" />
     </StackPanel>
 </UserControl>

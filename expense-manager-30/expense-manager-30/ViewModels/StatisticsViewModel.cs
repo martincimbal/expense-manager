@@ -14,31 +14,34 @@ namespace expense_manager_30.ViewModels;
 
 public partial class StatisticsViewModel : ViewModelBase
 {
-    private readonly DbService _dbService;
+    private readonly DbService _database;
 
-    [ObservableProperty]
-    private ObservableCollection<ISeries> _pieSeries;
+    [ObservableProperty] private ObservableCollection<ISeries> _barSeries;
 
-    [ObservableProperty]
-    private ObservableCollection<ISeries> _barSeries;
+    [ObservableProperty] private Axis[] _barXAxis = [];
 
-    [ObservableProperty]
-    private ObservableCollection<ISeries> _lineSeries;
+    [ObservableProperty] private Axis[] _barYAxis = [];
 
-    [ObservableProperty]
-    private Axis[] _barXAxis = [];
+    [ObservableProperty] private bool _isIncome;
 
-    [ObservableProperty]
-    private Axis[] _barYAxis = [];
+    [ObservableProperty] private ObservableCollection<ISeries> _lineSeries;
 
-    [ObservableProperty]
-    private Axis[] _lineXAxis = [];
+    [ObservableProperty] private Axis[] _lineXAxis = [];
 
-    [ObservableProperty]
-    private Axis[] _lineYAxis = [];
+    [ObservableProperty] private Axis[] _lineYAxis = [];
 
-    [ObservableProperty]
-    private bool _isIncome;
+    [ObservableProperty] private ObservableCollection<ISeries> _pieSeries;
+
+    [ObservableProperty] private string _selectedChart = "Categories";
+
+    public StatisticsViewModel()
+    {
+        _database = new DbService();
+        PieSeries = [];
+        BarSeries = [];
+        LineSeries = [];
+        LoadInitialData();
+    }
 
     public bool ShowIncomeCheckBox => SelectedChart != "Balance";
 
@@ -49,19 +52,11 @@ public partial class StatisticsViewModel : ViewModelBase
         "Balance"
     ];
 
-    [ObservableProperty]
-    private string _selectedChart = "Categories";
-
-    public StatisticsViewModel()
+    partial void OnIsIncomeChanged(bool value)
     {
-        _dbService = new DbService();
-        PieSeries = [];
-        BarSeries = [];
-        LineSeries = [];
-        LoadInitialData();
+        LoadStatistics();
     }
 
-    partial void OnIsIncomeChanged(bool value) => LoadStatistics();
     partial void OnSelectedChartChanged(string value)
     {
         OnPropertyChanged(nameof(ShowIncomeCheckBox));
@@ -79,7 +74,7 @@ public partial class StatisticsViewModel : ViewModelBase
     {
         if (!Session.IsLoggedIn) return;
 
-        var transactions = DbService.GetTransactions(Session.CurrentUserId)
+        var transactions = _database.GetTransactions(Session.CurrentUserId)
             .Where(t => t.IsIncome == IsIncome)
             .OrderBy(t => t.Date)
             .ToList();
@@ -90,23 +85,21 @@ public partial class StatisticsViewModel : ViewModelBase
 
     private void UpdatePieChart(List<Transaction> transactions)
     {
-        var categories = DbService.GetCategories(Session.CurrentUserId);
-        
+        var categories = _database.GetCategories(Session.CurrentUserId);
+
         PieSeries.Clear();
         foreach (var group in transactions
-            .GroupBy(t => t.CategoryId)
-            .Select(g => new
-            {
-                Category = categories.FirstOrDefault(c => c.Id == g.Key)?.Name ?? "Unknown",
-                Sum = g.Sum(t => t.Amount)
-            }))
-        {
+                     .GroupBy(t => t.CategoryId)
+                     .Select(g => new
+                     {
+                         Category = categories.FirstOrDefault(c => c.Id == g.Key)?.Name ?? "Unknown",
+                         Sum = g.Sum(t => t.Amount)
+                     }))
             PieSeries.Add(new PieSeries<decimal>
             {
                 Values = [group.Sum],
                 Name = group.Category
             });
-        }
     }
 
     private void UpdateBarChart(List<Transaction> transactions)
@@ -125,15 +118,16 @@ public partial class StatisticsViewModel : ViewModelBase
 
         BarXAxis =
         [
-            new Axis 
-            { 
+            new Axis
+            {
                 Labels = byMonth
-                    .Select(g => $"{CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(g.Key.Month)} {g.Key.Year}")
-                    .ToList(), 
-                Name = "Month" 
+                    .Select(g =>
+                        $"{CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(g.Key.Month)} {g.Key.Year}")
+                    .ToList(),
+                Name = "Month"
             }
         ];
-    
+
         BarSeries.Add(new ColumnSeries<decimal>
         {
             Values = byMonth
@@ -144,10 +138,11 @@ public partial class StatisticsViewModel : ViewModelBase
             Fill = new SolidColorPaint(SKColors.SteelBlue)
         });
     }
+
     private void UpdateLineChart()
     {
         LineSeries.Clear();
-        var allTransactions = DbService.GetTransactions(Session.CurrentUserId)
+        var allTransactions = _database.GetTransactions(Session.CurrentUserId)
             .OrderBy(t => t.Date)
             .ToList();
 
@@ -177,4 +172,5 @@ public partial class StatisticsViewModel : ViewModelBase
         });
 
         LineXAxis = [new Axis { Labels = balanceLabels, Name = "Date", LabelsRotation = 45 }];
-    }}
+    }
+}

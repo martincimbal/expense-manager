@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Windows.Input;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -11,32 +12,29 @@ namespace expense_manager_30.ViewModels;
 
 public partial class LoginWindowViewModel : ObservableObject
 {
-    private readonly DbService _dbService;
+    private readonly DbService _database;
 
-    [ObservableProperty]
-    private string username = string.Empty;
+    [ObservableProperty] private string _loginMessage = string.Empty;
 
-    [ObservableProperty]
-    private string password = string.Empty;
+    [ObservableProperty] private string _password = string.Empty;
 
-    [ObservableProperty]
-    private string loginMessage = string.Empty;
-
-    public ICommand LoginCommand { get; }
-    public ICommand RegisterCommand { get; }
+    [ObservableProperty] private string _username = string.Empty;
 
     public LoginWindowViewModel()
     {
-        _dbService = new DbService();
+        _database = new DbService();
         LoginCommand = new RelayCommand(Login);
         RegisterCommand = new RelayCommand(OpenRegister);
     }
 
+    public ICommand LoginCommand { get; }
+    public ICommand RegisterCommand { get; }
+
     private void Login()
     {
-        if (DbService.LoginUser(Username, Password))
+        if (_database.LoginUser(Username, Password))
         {
-            var userId = DbService.GetUserIdByUsername(Username);
+            var userId = _database.GetUserIdByUsername(Username);
             if (userId != null)
             {
                 Session.SetUser(userId.Value, Username);
@@ -54,7 +52,7 @@ public partial class LoginWindowViewModel : ObservableObject
         }
     }
 
-    private void OpenRegister()
+    private static void OpenRegister()
     {
         var registerView = new RegisterWindowView
         {
@@ -63,9 +61,9 @@ public partial class LoginWindowViewModel : ObservableObject
         registerView.Show();
     }
 
-    private void ReplaceWindow(Window newWindow)
+    private static void ReplaceWindow(Window newWindow)
     {
-        if (Avalonia.Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime lifetime)
+        if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime lifetime)
             return;
         var currentWindow = lifetime.Windows.FirstOrDefault(w => w.IsActive);
         newWindow.Show();

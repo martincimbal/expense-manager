@@ -10,7 +10,7 @@
         Width="1200"
         Height="700"
         Title="Expense Manager">
-    
+
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
@@ -35,5 +35,5 @@
             <TransitioningContentControl Content="{Binding CurrentPage}" />
         </SplitView.Content>
     </SplitView>
-    
+
 </Window>
