@@ -8,8 +8,6 @@ namespace expense_manager_30.ViewModels;
 
 public partial class AccountViewModel : ViewModelBase
 {
-    private readonly DbService _database = new();
-
     [ObservableProperty] private string _confirmPassword = string.Empty;
 
     [ObservableProperty] private string _currentPassword = string.Empty;
@@ -43,7 +41,7 @@ public partial class AccountViewModel : ViewModelBase
             return;
         }
 
-        var success = _database.ChangePassword(Session.CurrentUserId, CurrentPassword, NewPassword);
+        var success = DbService.ChangePassword(Session.CurrentUserId, CurrentPassword, NewPassword);
         StatusMessage = success ? "Password changed successfully." : "Current password is incorrect.";
     }
 

@@ -8,8 +8,6 @@ namespace expense_manager_30.ViewModels;
 
 public partial class LoginWindowViewModel : ObservableObject
 {
-    private readonly DbService _database;
-
     [ObservableProperty] private string _loginMessage = string.Empty;
 
     [ObservableProperty] private string _password = string.Empty;
@@ -18,7 +16,6 @@ public partial class LoginWindowViewModel : ObservableObject
 
     public LoginWindowViewModel()
     {
-        _database = new DbService();
         LoginCommand = new RelayCommand(Login);
         RegisterCommand = new RelayCommand(OpenRegister);
     }
@@ -28,32 +25,27 @@ public partial class LoginWindowViewModel : ObservableObject
 
     private void Login()
     {
-        if (_database.LoginUser(Username, Password))
-        {
-            var userId = _database.GetUserIdByUsername(Username);
-            if (userId != null)
-            {
-                Session.SetUser(userId.Value, Username);
-                LoginMessage = "Login successful.";
-                WindowManagement.ReplaceWindow(new MainWindow());
-            }
-            else
-            {
-                LoginMessage = "Unexpected error: user not found.";
-            }
-        }
-        else
+        if (!DbService.LoginUser(Username, Password))
         {
             LoginMessage = "Invalid username or password.";
+            return;
         }
+
+        var userId = DbService.GetUserIdByUsername(Username);
+        if (userId == null)
+        {
+            LoginMessage = "Unexpected error: user not found.";
+            return;
+        }
+
+        Session.SetUser(userId.Value, Username);
+        LoginMessage = "Login successful.";
+
+        WindowManagement.ReplaceWindow(new MainWindow());
     }
 
     private static void OpenRegister()
     {
-        var registerView = new RegisterWindowView
-        {
-            DataContext = new RegisterWindowViewModel()
-        };
-        registerView.Show();
+        WindowManagement.ReplaceWindow(new RegisterWindowView());
     }
 }

@@ -27,16 +27,16 @@
                     Grid.Row="1"
                     Margin="10"
                     HorizontalAlignment="Left">
-            
+
             <TextBlock Text="From:"
                        VerticalAlignment="Center" />
-            
-            <DatePicker SelectedDate="{Binding StartDateFilter}" 
+
+            <DatePicker SelectedDate="{Binding StartDateFilter}"
                         Width="300" />
 
-            <TextBlock Text="To:" 
+            <TextBlock Text="To:"
                        VerticalAlignment="Center" />
-            
+
             <DatePicker SelectedDate="{Binding EndDateFilter}"
                         Width="300" />
         </StackPanel>

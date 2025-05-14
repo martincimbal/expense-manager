@@ -3,7 +3,7 @@ using expense_manager_30.enums;
 
 namespace expense_manager_30.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : ObservableObject
 {
     [ObservableProperty] private object? _currentPage;
 
@@ -28,5 +28,4 @@ public partial class MainWindowViewModel : ViewModelBase
             _ => CurrentPage
         };
     }
-
 }

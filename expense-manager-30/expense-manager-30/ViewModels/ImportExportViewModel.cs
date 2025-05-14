@@ -13,8 +13,6 @@ namespace expense_manager_30.ViewModels;
 
 public partial class ImportExportViewModel : ViewModelBase
 {
-    private readonly DbService _database = new();
-
     [ObservableProperty] private string _statusMessage = string.Empty;
 
     public async Task ImportFromFileAsync(IStorageFile file)
@@ -32,7 +30,7 @@ public partial class ImportExportViewModel : ViewModelBase
                 return;
             }
 
-            var existingTransactions = _database.GetTransactions(Session.CurrentUserId);
+            var existingTransactions = DbService.GetTransactions(Session.CurrentUserId);
 
             var importedCount = 0;
             foreach (var t in from t in transactionsToImport
@@ -45,7 +43,7 @@ public partial class ImportExportViewModel : ViewModelBase
                      where !alreadyExists
                      select t)
             {
-                _database.AddTransaction(
+                DbService.AddTransaction(
                     t.Amount,
                     t.IsIncome,
                     t.Date,
@@ -68,7 +66,7 @@ public partial class ImportExportViewModel : ViewModelBase
     {
         try
         {
-            var transactions = _database.GetTransactions(Session.CurrentUserId);
+            var transactions = DbService.GetTransactions(Session.CurrentUserId);
             var json = JsonSerializer.Serialize(transactions, new JsonSerializerOptions { WriteIndented = true });
 
             await using var stream = await file.OpenWriteAsync();

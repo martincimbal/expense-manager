@@ -47,14 +47,14 @@
                         Grid.Column="1"
                         HorizontalAlignment="Right"
                         Spacing="10">
-                    
-                    <Button Content="Cancel"
-                            Command="{Binding CancelCommand}" />
-                    
-                    <Button Content="Save"
-                            Command="{Binding SaveCommand}"
-                            Background="Green"
-                            Foreground="White" />
+
+                <Button Content="Cancel"
+                        Command="{Binding CancelCommand}" />
+
+                <Button Content="Save"
+                        Command="{Binding SaveCommand}"
+                        Background="Green"
+                        Foreground="White" />
             </StackPanel>
         </Grid>
     </StackPanel>

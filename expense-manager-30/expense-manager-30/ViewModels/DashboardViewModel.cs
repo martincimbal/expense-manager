@@ -11,8 +11,6 @@ namespace expense_manager_30.ViewModels;
 
 public partial class DashboardViewModel : ViewModelBase
 {
-    private readonly DbService _database;
-
     private readonly MainWindowViewModel _mainWindow;
 
     [ObservableProperty] private decimal _currentBalance;
@@ -28,7 +26,6 @@ public partial class DashboardViewModel : ViewModelBase
     public DashboardViewModel(MainWindowViewModel mainWindow)
     {
         _mainWindow = mainWindow;
-        _database = new DbService();
 
         GoToTransactionsCommand = new RelayCommand(GoToTransactions);
         GoToStatisticsCommand = new RelayCommand(GoToStatistics);
@@ -44,8 +41,8 @@ public partial class DashboardViewModel : ViewModelBase
     {
         if (!Session.IsLoggedIn) return;
 
-        var allTransactions = _database.GetTransactions(Session.CurrentUserId);
-        var categories = _database.GetCategories(Session.CurrentUserId);
+        var allTransactions = DbService.GetTransactions(Session.CurrentUserId);
+        var categories = DbService.GetCategories(Session.CurrentUserId);
 
         CurrentBalance = allTransactions.Sum(t => t.IsIncome ? t.Amount : -t.Amount);
         TotalTransactions = allTransactions.Count;

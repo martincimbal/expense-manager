@@ -19,7 +19,7 @@ public class DbService
         CreateTables();
     }
 
-    private void CreateTables()
+    private static void CreateTables()
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -73,7 +73,7 @@ public class DbService
     }
 
 
-    private (string passwordHash, string salt) HashPassword(string password)
+    private static (string passwordHash, string salt) HashPassword(string password)
     {
         var salt = Guid.NewGuid().ToString();
 
@@ -83,12 +83,18 @@ public class DbService
         return (passwordHash, salt);
     }
 
-    public void RegisterUser(string username, string password)
+    public static bool RegisterUser(string username, string password)
     {
-        var (passwordHash, salt) = HashPassword(password);
-
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
+
+        const string checkQuery = "SELECT COUNT(*) FROM Users WHERE Username = @Username";
+        using var checkCommand = new SQLiteCommand(checkQuery, connection);
+        checkCommand.Parameters.AddWithValue("@Username", username);
+
+        var userCount = Convert.ToInt32(checkCommand.ExecuteScalar());
+        if (userCount > 0) return false;
+        var (passwordHash, salt) = HashPassword(password);
 
         const string query =
             "INSERT INTO Users (Username, PasswordHash, Salt) VALUES (@Username, @PasswordHash, @Salt)";
@@ -98,9 +104,11 @@ public class DbService
         command.Parameters.AddWithValue("@Salt", salt);
 
         command.ExecuteNonQuery();
+
+        return true;
     }
 
-    public bool LoginUser(string username, string password)
+    public static bool LoginUser(string username, string password)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -120,7 +128,7 @@ public class DbService
         return storedHash == passwordHash;
     }
 
-    public void AddCategory(string categoryName, int? userId)
+    public static void AddCategory(string categoryName, int? userId)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -133,7 +141,7 @@ public class DbService
         command.ExecuteNonQuery();
     }
 
-    public void AddTransaction(decimal amount, bool isIncome, DateTime date, string? note, int categoryId, int userId)
+    public static void AddTransaction(decimal amount, bool isIncome, DateTime date, string? note, int categoryId, int userId)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -152,7 +160,7 @@ public class DbService
         command.ExecuteNonQuery();
     }
 
-    public List<Transaction> GetTransactions(int userId)
+    public static List<Transaction> GetTransactions(int userId)
     {
         var transactions = new List<Transaction>();
 
@@ -179,7 +187,7 @@ public class DbService
         return transactions;
     }
 
-    public List<Category> GetCategories(int userId)
+    public static List<Category> GetCategories(int userId)
     {
         var categories = new List<Category>();
 
@@ -202,7 +210,7 @@ public class DbService
         return categories;
     }
 
-    public List<Transaction> GetFilteredTransactions(
+    public static List<Transaction> GetFilteredTransactions(
         int userId,
         int? categoryId = null,
         DateTime? startDate = null,
@@ -297,7 +305,7 @@ public class DbService
         return (totalIncome, totalExpenses);
     }
 
-    public int? GetUserIdByUsername(string username)
+    public static int? GetUserIdByUsername(string username)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -312,7 +320,7 @@ public class DbService
         return null;
     }
 
-    public void DeleteTransaction(int transactionId)
+    public static void DeleteTransaction(int transactionId)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -322,7 +330,7 @@ public class DbService
         command.ExecuteNonQuery();
     }
 
-    public void UpdateTransaction(Transaction transaction)
+    public static void UpdateTransaction(Transaction transaction)
     {
         using var conn = new SQLiteConnection($"Data Source={DbFilePath};");
         conn.Open();
@@ -347,7 +355,7 @@ public class DbService
         cmd.ExecuteNonQuery();
     }
 
-    public bool ChangePassword(int userId, string currentPassword, string newPassword)
+    public static bool ChangePassword(int userId, string currentPassword, string newPassword)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
@@ -378,7 +386,7 @@ public class DbService
         return true;
     }
 
-    public bool DeleteCategory(int categoryId)
+    public static bool DeleteCategory(int categoryId)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();

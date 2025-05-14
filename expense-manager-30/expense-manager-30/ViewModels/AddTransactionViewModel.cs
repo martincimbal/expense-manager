@@ -10,8 +10,6 @@ namespace expense_manager_30.ViewModels;
 
 public partial class AddTransactionViewModel : ViewModelBase
 {
-    private readonly DbService _database;
-
     [ObservableProperty] private string _amount = string.Empty;
 
     [ObservableProperty] private ObservableCollection<Category> _categories = [];
@@ -28,7 +26,6 @@ public partial class AddTransactionViewModel : ViewModelBase
 
     public AddTransactionViewModel()
     {
-        _database = new DbService();
         AddTransactionCommand = new RelayCommand(AddTransaction);
         LoadCategories();
     }
@@ -43,7 +40,7 @@ public partial class AddTransactionViewModel : ViewModelBase
             return;
         }
 
-        var loadedCategories = _database.GetCategories(Session.CurrentUserId);
+        var loadedCategories = DbService.GetCategories(Session.CurrentUserId);
         Categories = new ObservableCollection<Category>(loadedCategories);
     }
 
@@ -68,7 +65,7 @@ public partial class AddTransactionViewModel : ViewModelBase
         }
 
         // Convert DateTimeOffset to DateTime before passing it to the DbService
-        _database.AddTransaction(parsedAmount, IsIncome, Date.DateTime, Note, SelectedCategory.Id,
+        DbService.AddTransaction(parsedAmount, IsIncome, Date.DateTime, Note, SelectedCategory.Id,
             Session.CurrentUserId);
 
         StatusMessage = "Transaction added successfully.";

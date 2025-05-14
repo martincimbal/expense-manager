@@ -11,8 +11,6 @@ namespace expense_manager_30.ViewModels;
 
 public partial class EditTransactionWindowViewModel : ViewModelBase
 {
-    private readonly DbService _database;
-
     private readonly int _transactionId;
 
     [ObservableProperty] private string _amount;
@@ -32,8 +30,6 @@ public partial class EditTransactionWindowViewModel : ViewModelBase
 
     public EditTransactionWindowViewModel(Transaction transaction, ObservableCollection<Category> categories)
     {
-        _database = new DbService();
-
         _transactionId = transaction.Id;
         Amount = transaction.Amount.ToString("0.##");
         IsIncome = transaction.IsIncome;
@@ -88,7 +84,7 @@ public partial class EditTransactionWindowViewModel : ViewModelBase
             UserId = Session.CurrentUserId
         };
 
-        _database.UpdateTransaction(updatedTransaction);
+        DbService.UpdateTransaction(updatedTransaction);
         IsSaved = true;
         CloseAction?.Invoke();
     }
@@ -107,7 +103,7 @@ public partial class EditTransactionWindowViewModel : ViewModelBase
             return;
         }
 
-        _database.DeleteTransaction(_transactionId);
+        DbService.DeleteTransaction(_transactionId);
         IsDeleted = true;
         CloseAction?.Invoke();
     }

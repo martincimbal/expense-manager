@@ -14,8 +14,6 @@ namespace expense_manager_30.ViewModels;
 
 public partial class StatisticsViewModel : ViewModelBase
 {
-    private readonly DbService _database;
-
     [ObservableProperty] private ObservableCollection<ISeries> _barSeries;
 
     [ObservableProperty] private Axis[] _barXAxis = [];
@@ -36,7 +34,6 @@ public partial class StatisticsViewModel : ViewModelBase
 
     public StatisticsViewModel()
     {
-        _database = new DbService();
         PieSeries = [];
         BarSeries = [];
         LineSeries = [];
@@ -67,25 +64,25 @@ public partial class StatisticsViewModel : ViewModelBase
     {
         if (!Session.IsLoggedIn) return;
         LoadStatistics();
-        UpdateLineChart();
+        UpdateBalanceChart();
     }
 
     private void LoadStatistics()
     {
         if (!Session.IsLoggedIn) return;
 
-        var transactions = _database.GetTransactions(Session.CurrentUserId)
+        var transactions = DbService.GetTransactions(Session.CurrentUserId)
             .Where(t => t.IsIncome == IsIncome)
             .OrderBy(t => t.Date)
             .ToList();
 
-        UpdatePieChart(transactions);
-        UpdateBarChart(transactions);
+        UpdateCategoriesChart(transactions);
+        UpdateMonthlyChart(transactions);
     }
 
-    private void UpdatePieChart(List<Transaction> transactions)
+    private void UpdateCategoriesChart(List<Transaction> transactions)
     {
-        var categories = _database.GetCategories(Session.CurrentUserId);
+        var categories = DbService.GetCategories(Session.CurrentUserId);
 
         PieSeries.Clear();
         foreach (var group in transactions
@@ -102,7 +99,7 @@ public partial class StatisticsViewModel : ViewModelBase
             });
     }
 
-    private void UpdateBarChart(List<Transaction> transactions)
+    private void UpdateMonthlyChart(List<Transaction> transactions)
     {
         BarSeries.Clear();
         var byMonth = transactions
@@ -139,10 +136,10 @@ public partial class StatisticsViewModel : ViewModelBase
         });
     }
 
-    private void UpdateLineChart()
+    private void UpdateBalanceChart()
     {
         LineSeries.Clear();
-        var allTransactions = _database.GetTransactions(Session.CurrentUserId)
+        var allTransactions = DbService.GetTransactions(Session.CurrentUserId)
             .OrderBy(t => t.Date)
             .ToList();
 

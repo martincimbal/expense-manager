@@ -8,8 +8,6 @@ namespace expense_manager_30.ViewModels;
 
 public partial class CategoriesViewModel : ViewModelBase
 {
-    private readonly DbService _database = new();
-
     [ObservableProperty] private ObservableCollection<Category> _categories = [];
 
     [ObservableProperty] private string _categoryName = string.Empty;
@@ -28,7 +26,7 @@ public partial class CategoriesViewModel : ViewModelBase
     private void LoadCategories()
     {
         if (!Session.IsLoggedIn) return;
-        var cats = _database.GetCategories(Session.CurrentUserId);
+        var cats = DbService.GetCategories(Session.CurrentUserId);
         Categories = new ObservableCollection<Category>(cats);
     }
 
@@ -52,7 +50,7 @@ public partial class CategoriesViewModel : ViewModelBase
             return;
         }
 
-        _database.AddCategory(CategoryName, Session.CurrentUserId);
+        DbService.AddCategory(CategoryName, Session.CurrentUserId);
         StatusMessage = "Category added!";
         CategoryName = string.Empty;
         LoadCategories();
@@ -73,7 +71,7 @@ public partial class CategoriesViewModel : ViewModelBase
             return;
         }
 
-        var isDeleted = _database.DeleteCategory(SelectedCategory.Id);
+        var isDeleted = DbService.DeleteCategory(SelectedCategory.Id);
 
         if (isDeleted)
         {

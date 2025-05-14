@@ -14,8 +14,6 @@ namespace expense_manager_30.ViewModels;
 
 public partial class TransactionListViewModel : ViewModelBase
 {
-    private readonly DbService _database;
-
     [ObservableProperty] private ObservableCollection<Category> _categories = [];
 
     [ObservableProperty] private DateTimeOffset? _endDateFilter;
@@ -34,7 +32,6 @@ public partial class TransactionListViewModel : ViewModelBase
 
     public TransactionListViewModel()
     {
-        _database = new DbService();
         ApplyFilterCommand = new RelayCommand(ApplyFilter);
         ClearFilterCommand = new RelayCommand(ClearFilter);
         DeleteTransactionCommand = new RelayCommand<Transaction>(DeleteTransaction);
@@ -57,8 +54,8 @@ public partial class TransactionListViewModel : ViewModelBase
             return;
         }
 
-        var userTransactions = _database.GetTransactions(Session.CurrentUserId);
-        var categories = _database.GetCategories(Session.CurrentUserId);
+        var userTransactions = DbService.GetTransactions(Session.CurrentUserId);
+        var categories = DbService.GetCategories(Session.CurrentUserId);
 
         foreach (var transaction in userTransactions)
         {
@@ -79,7 +76,7 @@ public partial class TransactionListViewModel : ViewModelBase
         var endDate = EndDateFilter?.DateTime.Date.AddDays(1).AddSeconds(-1);
         bool? incomeFilter = IsIncomeFilter ? true : null;
 
-        var filtered = _database.GetFilteredTransactions(
+        var filtered = DbService.GetFilteredTransactions(
             Session.CurrentUserId,
             categoryId,
             startDate,
@@ -112,7 +109,7 @@ public partial class TransactionListViewModel : ViewModelBase
     {
         if (transaction == null) return;
 
-        _database.DeleteTransaction(transaction.Id);
+        DbService.DeleteTransaction(transaction.Id);
         LoadTransactions();
     }
 
@@ -120,7 +117,7 @@ public partial class TransactionListViewModel : ViewModelBase
     {
         if (transaction == null) return;
 
-        var categories = _database.GetCategories(Session.CurrentUserId);
+        var categories = DbService.GetCategories(Session.CurrentUserId);
 
         var editWindow = new EditTransactionWindow();
         var viewModel = new EditTransactionWindowViewModel(transaction, new ObservableCollection<Category>(categories))

@@ -8,5 +8,5 @@ public enum PageType
     Categories,
     Statistics,
     ImportExport,
-    Account,
+    Account
 }

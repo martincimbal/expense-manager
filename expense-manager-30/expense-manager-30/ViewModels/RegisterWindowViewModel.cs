@@ -1,14 +1,15 @@
-using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using expense_manager_30.Services;
+using expense_manager_30.Views;
 
 namespace expense_manager_30.ViewModels;
 
 public partial class RegisterWindowViewModel : ObservableObject
 {
-    private readonly DbService _dbService;
+    private readonly DbService _database;
 
     [ObservableProperty] private string _confirmPassword = string.Empty;
 
@@ -20,11 +21,13 @@ public partial class RegisterWindowViewModel : ObservableObject
 
     public RegisterWindowViewModel()
     {
-        _dbService = new DbService();
+        _database = new DbService();
         RegisterCommand = new RelayCommand(RegisterUser);
+        ReturnToLoginCommand = new RelayCommand(ReturnToLogin);
     }
 
     public ICommand RegisterCommand { get; }
+    public ICommand ReturnToLoginCommand { get; }
 
     private void RegisterUser()
     {
@@ -41,14 +44,34 @@ public partial class RegisterWindowViewModel : ObservableObject
             return;
         }
 
-        try
+        if (!DbService.RegisterUser(Username, Password))
         {
-            _dbService.RegisterUser(Username, Password);
-            ErrorMessage = "Registration successful!";
+            ErrorMessage = "Username already exists.";
+            return;
         }
-        catch (Exception ex)
-        {
-            ErrorMessage = $"Error: {ex.Message}";
-        }
+
+        AddCategories();
+        ErrorMessage = "Registration successful!";
+    }
+
+    private void AddCategories()
+    {
+        var id = DbService.GetUserIdByUsername(Username);
+
+        List<string> categories =
+        [
+            "Food",
+            "Salary",
+            "Rent",
+            "Health",
+            "Subscription"
+        ];
+
+        categories.ForEach(category => DbService.AddCategory(category, id));
+    }
+
+    private static void ReturnToLogin()
+    {
+        WindowManagement.ReplaceWindow(new LoginWindow());
     }
 }
