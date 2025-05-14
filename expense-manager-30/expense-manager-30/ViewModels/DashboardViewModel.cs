@@ -70,11 +70,11 @@ public partial class DashboardViewModel : ViewModelBase
 
     private void GoToTransactions()
     {
-        _mainWindow.CurrentPage = PageType.Transactions;
+        _mainWindow.SelectedPage = PageType.Transactions;
     }
 
     private void GoToStatistics()
     {
-        _mainWindow.CurrentPage = PageType.Statistics;
+        _mainWindow.SelectedPage = PageType.Statistics;
     }
 }
