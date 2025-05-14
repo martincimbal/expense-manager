@@ -8,22 +8,34 @@
              x:DataType="vm:ImportExportViewModel">
 
     <StackPanel Margin="20" 
-                Spacing="15">
+                Spacing="15"
+                HorizontalAlignment="Center">
         
-        <TextBlock Text="Import and Export transactions" 
+        <TextBlock Text="Import transactions" 
                    FontSize="20" 
-                   FontWeight="Bold"/>
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0, 20"/>
 
         <Button Content="Import transactions" 
-                Click="Import_Click"/>
+                Click="Import_Click"
+                HorizontalAlignment="Center"/>
         
         <TextBlock Text="(Only transactions that are not already in the database will be imported.)"
                    FontSize="12"
                    Foreground="Gray"
                    TextWrapping="Wrap"
-                   Margin="0, 0, 0, 10"/>
+                   HorizontalAlignment="Center"/>
 
-        <Button Content="Export transactions" Click="Export_Click"/>
+        <TextBlock Text="Export transactions" 
+                   FontSize="20" 
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0, 20"/>
+        
+        <Button Content="Export transactions"
+                Click="Export_Click"
+                HorizontalAlignment="Center"/>
 
         <TextBlock Text="{Binding StatusMessage}" 
                    Foreground="DarkGreen"/>

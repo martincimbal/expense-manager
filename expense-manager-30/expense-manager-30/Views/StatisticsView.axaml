@@ -20,20 +20,28 @@
     <ScrollViewer x:Name="MainScrollViewer">
         <StackPanel Margin="20"
                     Spacing="15">
-            <!-- ZMĚNA: CheckBox vedle ComboBox -->
-            <TextBlock Text="Transaction Statistics" FontSize="22" FontWeight="Bold" />
-            <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,0,20">
+
+            <TextBlock Text="Transaction Statistics"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,15"/>
+            
+            <StackPanel Orientation="Horizontal" 
+                        Spacing="10" 
+                        Margin="0,0,0,20"
+                        HorizontalAlignment="Center">
+                
                 <ComboBox ItemsSource="{Binding AvailableCharts}"
                           SelectedItem="{Binding SelectedChart}"
                           Width="200" />
-                <!-- ZMĚNA: Přidán IsVisible a TwoWay binding -->
+
                 <CheckBox Content="Show incomes"
                           IsChecked="{Binding IsIncome, Mode=TwoWay}"
                           IsVisible="{Binding ShowIncomeCheckBox}"
                           VerticalAlignment="Center" />
             </StackPanel>
 
-            <!-- Zbytek zůstává stejný -->
             <Border
                 IsVisible="{Binding SelectedChart, Converter={StaticResource StringEqualityConverter}, ConverterParameter='Categories'}">
                 <avalonia:PieChart

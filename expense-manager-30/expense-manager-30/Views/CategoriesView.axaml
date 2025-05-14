@@ -9,9 +9,14 @@
 
     <StackPanel Margin="20"
                 Spacing="15" 
-                Width="400">
+                Width="300"
+                HorizontalAlignment="Center">
 
-        <TextBlock Text="Add New Category" FontWeight="Bold" FontSize="18" />
+        <TextBlock Text="Add New Category"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,15"/>
 
         <TextBox 
             Watermark="Category name"
@@ -24,6 +29,7 @@
         <Button 
             Content="Add Category"
             Command="{Binding AddCategoryCommand}"
+            HorizontalContentAlignment="Center"
             Background="DarkGreen"
             Foreground="White"
             FontSize="16"
@@ -33,7 +39,11 @@
 
         <Separator />
 
-        <TextBlock Text="Delete Category" FontWeight="Bold" FontSize="18" />
+        <TextBlock Text="Delete Category"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,15"/>
 
         <ComboBox 
             ItemsSource="{Binding Categories}"
@@ -46,6 +56,7 @@
         <Button 
             Content="Delete Category"
             Command="{Binding DeleteCategoryCommand}"
+            HorizontalContentAlignment="Center"
             Background="Crimson"
             Foreground="White"
             FontSize="16"

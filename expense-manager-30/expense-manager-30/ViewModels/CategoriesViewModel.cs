@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using expense_manager_30.Models;
@@ -9,14 +6,19 @@ using expense_manager_30.Services;
 
 namespace expense_manager_30.ViewModels;
 
-public partial class CategoriesViewModel : ViewModelBase{
+public partial class CategoriesViewModel : ViewModelBase
+{
     private readonly DbService _database = new();
-
-    [ObservableProperty] private string _categoryName = string.Empty;
-    [ObservableProperty] private string _statusMessage = string.Empty;
+    
     [ObservableProperty] private ObservableCollection<Category> _categories = [];
+    
+    [ObservableProperty] private string _categoryName = string.Empty;
+    
+    [ObservableProperty] private bool _isDeleteButtonVisible;
+    
     [ObservableProperty] private Category? _selectedCategory;
-    [ObservableProperty] private bool _isDeleteButtonVisible = false;
+    
+    [ObservableProperty] private string _statusMessage = string.Empty;
 
     public CategoriesViewModel()
     {
@@ -71,7 +73,7 @@ public partial class CategoriesViewModel : ViewModelBase{
             return;
         }
 
-        bool isDeleted = _database.DeleteCategory(SelectedCategory.Id);
+        var isDeleted = _database.DeleteCategory(SelectedCategory.Id);
 
         if (isDeleted)
         {
