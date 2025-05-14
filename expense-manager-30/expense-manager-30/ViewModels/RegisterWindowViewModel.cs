@@ -13,7 +13,7 @@ public partial class RegisterWindowViewModel : ObservableObject
 
     [ObservableProperty] private string _confirmPassword = string.Empty;
 
-    [ObservableProperty] private string _errorMessage = string.Empty;
+    [ObservableProperty] private string _statusMessage = string.Empty;
 
     [ObservableProperty] private string _password = string.Empty;
 
@@ -34,24 +34,24 @@ public partial class RegisterWindowViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password) ||
             string.IsNullOrWhiteSpace(ConfirmPassword))
         {
-            ErrorMessage = "All fields are required.";
+            StatusMessage = "All fields are required.";
             return;
         }
 
         if (Password != ConfirmPassword)
         {
-            ErrorMessage = "Passwords do not match.";
+            StatusMessage = "Passwords do not match.";
             return;
         }
 
         if (!DbService.RegisterUser(Username, Password))
         {
-            ErrorMessage = "Username already exists.";
+            StatusMessage = "Username already exists.";
             return;
         }
 
         AddCategories();
-        ErrorMessage = "Registration successful!";
+        StatusMessage = "Registration successful!";
     }
 
     private void AddCategories()

@@ -128,20 +128,33 @@ public class DbService
         return storedHash == passwordHash;
     }
 
-    public static void AddCategory(string categoryName, int? userId)
+    public static bool AddCategory(string categoryName, int? userId)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();
 
-        const string query = "INSERT INTO Categories (Name, UserId) VALUES (@Name, @UserId)";
-        using var command = new SQLiteCommand(query, connection);
-        command.Parameters.AddWithValue("@Name", categoryName);
-        command.Parameters.AddWithValue("@UserId", userId ?? (object)DBNull.Value);
+        const string checkQuery = "SELECT COUNT(*) FROM Categories WHERE Name = @Name AND UserId = @UserId";
+        using (var checkCommand = new SQLiteCommand(checkQuery, connection))
+        {
+            checkCommand.Parameters.AddWithValue("@Name", categoryName);
+            checkCommand.Parameters.AddWithValue("@UserId", userId ?? (object)DBNull.Value);
 
-        command.ExecuteNonQuery();
+            var count = (long) checkCommand.ExecuteScalar();
+            if (count > 0)
+                return false;
+        }
+
+        const string insertQuery = "INSERT INTO Categories (Name, UserId) VALUES (@Name, @UserId)";
+        using var insertCommand = new SQLiteCommand(insertQuery, connection);
+        insertCommand.Parameters.AddWithValue("@Name", categoryName);
+        insertCommand.Parameters.AddWithValue("@UserId", userId ?? (object)DBNull.Value);
+
+        insertCommand.ExecuteNonQuery();
+        return true;
     }
-
-    public static void AddTransaction(decimal amount, bool isIncome, DateTime date, string? note, int categoryId, int userId)
+    
+    public static void AddTransaction(decimal amount, bool isIncome, DateTime date, string? note, int categoryId,
+        int userId)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
         connection.Open();

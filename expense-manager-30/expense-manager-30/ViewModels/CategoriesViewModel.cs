@@ -50,7 +50,11 @@ public partial class CategoriesViewModel : ViewModelBase
             return;
         }
 
-        DbService.AddCategory(CategoryName, Session.CurrentUserId);
+        if (!DbService.AddCategory(CategoryName, Session.CurrentUserId))
+        {
+            StatusMessage = "Category already exists.";
+            return;
+        }
         StatusMessage = "Category added!";
         CategoryName = string.Empty;
         LoadCategories();

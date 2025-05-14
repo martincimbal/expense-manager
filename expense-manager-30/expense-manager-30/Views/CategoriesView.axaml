@@ -63,14 +63,17 @@
             Padding="10"
             Height="40"
             HorizontalAlignment="Stretch"
-            IsVisible="{Binding IsDeleteButtonVisible}" />
+            IsVisible="{Binding IsDeleteButtonVisible}"
+            Margin="0,0,0,20"/>
 
         <TextBlock
             Text="{Binding StatusMessage}"
-            Foreground="Red"
+            Foreground="Coral"
             FontSize="14"
             TextWrapping="Wrap"
-            HorizontalAlignment="Left" />
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Margin="20"/>
 
     </StackPanel>
 </UserControl>

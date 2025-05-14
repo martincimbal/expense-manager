@@ -9,7 +9,9 @@
         Icon="/Assets/accounting-logo.ico"
         Width="1200"
         Height="700"
-        Title="Expense Manager">
+        Title="Expense Manager"
+        MinWidth="800"
+        MinHeight="500">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
