@@ -21,7 +21,7 @@ public partial class MainWindowViewModel : ViewModelBase
             0 => new DashboardViewModel(),
             1 => new TransactionListViewModel(),
             2 => new AddTransactionViewModel(),
-            3 => new AddCategoryViewModel(),
+            3 => new CategoriesViewModel(),
             4 => new StatisticsViewModel(),
             5 => new ImportExportViewModel(),
             6 => new AccountViewModel(),

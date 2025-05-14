@@ -1,0 +1,65 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:expense_manager_30.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="expense_manager_30.Views.CategoriesView"
+             x:DataType="vm:CategoriesViewModel">
+
+    <StackPanel Margin="20"
+                Spacing="15" 
+                Width="400">
+
+        <TextBlock Text="Add New Category" FontWeight="Bold" FontSize="18" />
+
+        <TextBox 
+            Watermark="Category name"
+            Text="{Binding CategoryName, Mode=TwoWay}"
+            FontSize="16"
+            Padding="10"
+            Height="40"
+            HorizontalAlignment="Stretch"/>
+
+        <Button 
+            Content="Add Category"
+            Command="{Binding AddCategoryCommand}"
+            Background="DarkGreen"
+            Foreground="White"
+            FontSize="16"
+            Padding="10"
+            Height="40"
+            HorizontalAlignment="Stretch"/>
+
+        <Separator />
+
+        <TextBlock Text="Delete Category" FontWeight="Bold" FontSize="18" />
+
+        <ComboBox 
+            ItemsSource="{Binding Categories}"
+            SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+            FontSize="16"
+            Padding="10"
+            Height="40"
+            HorizontalAlignment="Stretch"/>
+
+        <Button 
+            Content="Delete Category"
+            Command="{Binding DeleteCategoryCommand}"
+            Background="Crimson"
+            Foreground="White"
+            FontSize="16"
+            Padding="10"
+            Height="40"
+            HorizontalAlignment="Stretch"
+            IsVisible="{Binding IsDeleteButtonVisible}"/>
+
+        <TextBlock 
+            Text="{Binding StatusMessage}"
+            Foreground="Red"
+            FontSize="14"
+            TextWrapping="Wrap"
+            HorizontalAlignment="Left"/>
+
+    </StackPanel>
+</UserControl>

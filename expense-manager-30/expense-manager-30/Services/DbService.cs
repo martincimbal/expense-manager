@@ -377,5 +377,30 @@ public class DbService
         updateCommand.ExecuteNonQuery();
         return true;
     }
+    
+    public bool DeleteCategory(int categoryId)
+    {
+        using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
+        connection.Open();
+
+        const string checkTransactionQuery = "SELECT COUNT(*) FROM Transactions WHERE CategoryId = @CategoryId";
+        using var command = new SQLiteCommand(checkTransactionQuery, connection);
+        command.Parameters.AddWithValue("@CategoryId", categoryId);
+
+        var count = Convert.ToInt32(command.ExecuteScalar());
+
+        if (count > 0)
+        {
+            return false;
+        }
+
+        const string deleteCategoryQuery = "DELETE FROM Categories WHERE Id = @CategoryId";
+        using var deleteCommand = new SQLiteCommand(deleteCategoryQuery, connection);
+        deleteCommand.Parameters.AddWithValue("@CategoryId", categoryId);
+
+        deleteCommand.ExecuteNonQuery();
+        return true;
+    }
+
 
 }

@@ -8,7 +8,7 @@
              x:DataType="vm:AddTransactionViewModel">
 
     <Design.DataContext>
-        <vm:AddCategoryViewModel />
+        <vm:CategoriesViewModel />
     </Design.DataContext>
 
     <StackPanel Margin="25"
