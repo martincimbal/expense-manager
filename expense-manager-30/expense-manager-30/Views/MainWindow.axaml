@@ -20,7 +20,7 @@
                DisplayMode="Inline">
 
         <SplitView.Pane>
-            <ListBox SelectedIndex="{Binding SelectedIndex}">
+            <ListBox SelectedIndex="{Binding SelectedPage}">
                 <ListBoxItem>Dashboard</ListBoxItem>
                 <ListBoxItem>Transactions</ListBoxItem>
                 <ListBoxItem>Add Transaction</ListBoxItem>

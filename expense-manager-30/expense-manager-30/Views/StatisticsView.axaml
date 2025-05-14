@@ -25,13 +25,13 @@
                        FontSize="22"
                        FontWeight="Bold"
                        HorizontalAlignment="Center"
-                       Margin="0,15"/>
-            
-            <StackPanel Orientation="Horizontal" 
-                        Spacing="10" 
+                       Margin="0,15" />
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="10"
                         Margin="0,0,0,20"
                         HorizontalAlignment="Center">
-                
+
                 <ComboBox ItemsSource="{Binding AvailableCharts}"
                           SelectedItem="{Binding SelectedChart}"
                           Width="200" />

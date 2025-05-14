@@ -9,19 +9,23 @@ namespace expense_manager_30.ViewModels;
 public partial class AccountViewModel : ViewModelBase
 {
     private readonly DbService _database = new();
-    [ObservableProperty] private string _currentPassword = string.Empty;
-    [ObservableProperty] private string _newPassword = string.Empty;
-    [ObservableProperty] private string _confirmPassword = string.Empty;
-    [ObservableProperty] private string _statusMessage = string.Empty;
 
-    public ICommand ChangePasswordCommand { get; }
-    public ICommand LogoutCommand { get; }
+    [ObservableProperty] private string _confirmPassword = string.Empty;
+
+    [ObservableProperty] private string _currentPassword = string.Empty;
+
+    [ObservableProperty] private string _newPassword = string.Empty;
+
+    [ObservableProperty] private string _statusMessage = string.Empty;
 
     public AccountViewModel()
     {
         ChangePasswordCommand = new RelayCommand(ChangePassword);
         LogoutCommand = new RelayCommand(Logout);
     }
+
+    public ICommand ChangePasswordCommand { get; }
+    public ICommand LogoutCommand { get; }
 
     private void ChangePassword()
     {
@@ -42,7 +46,7 @@ public partial class AccountViewModel : ViewModelBase
         var success = _database.ChangePassword(Session.CurrentUserId, CurrentPassword, NewPassword);
         StatusMessage = success ? "Password changed successfully." : "Current password is incorrect.";
     }
-    
+
     private void Logout()
     {
         if (Session.CurrentUserId == 0)
@@ -50,9 +54,9 @@ public partial class AccountViewModel : ViewModelBase
             StatusMessage = "User is not logged in.";
             return;
         }
+
         Session.Clear();
         var nextWindow = new LoginWindow();
         WindowManagement.ReplaceWindow(nextWindow);
     }
-
 }

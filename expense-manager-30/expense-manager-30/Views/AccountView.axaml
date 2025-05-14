@@ -6,18 +6,18 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="expense_manager_30.Views.AccountView"
              x:DataType="vm:AccountViewModel">
-    
+
     <Grid>
         <StackPanel HorizontalAlignment="Center"
                     Margin="20"
                     Spacing="15">
-            
+
             <TextBlock Text="Account"
                        FontSize="22"
                        FontWeight="Bold"
                        HorizontalAlignment="Center"
-                       Margin="0,15"/>
-            
+                       Margin="0,15" />
+
             <Button
                 Content="Logout"
                 Command="{Binding LogoutCommand}"
@@ -25,53 +25,52 @@
                 Foreground="White"
                 FontSize="16"
                 Padding="12"
-                Height="50" 
+                Height="50"
                 Width="200"
                 HorizontalAlignment="Center"
                 HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"/>
+                VerticalContentAlignment="Center" />
 
             <Separator />
 
             <StackPanel Width="300"
                         Spacing="10">
 
-                <TextBlock Text="Change Password" 
-                           FontWeight="Bold" 
+                <TextBlock Text="Change Password"
+                           FontWeight="Bold"
                            FontSize="18"
                            Margin="0 0 0 5"
-                           HorizontalAlignment="Center"/>
+                           HorizontalAlignment="Center" />
 
                 <TextBox
                     Watermark="Current Password"
                     PasswordChar="*"
                     Text="{Binding CurrentPassword, Mode=TwoWay}"
-                    Margin="0 5"/>
+                    Margin="0 5" />
 
                 <TextBox
                     Watermark="New Password"
                     PasswordChar="*"
-                    Text="{Binding NewPassword, Mode=TwoWay}" 
-                    Margin="0 5"/>
+                    Text="{Binding NewPassword, Mode=TwoWay}"
+                    Margin="0 5" />
 
                 <TextBox
                     Watermark="Confirm New Password"
                     PasswordChar="*"
-                    Text="{Binding ConfirmPassword, Mode=TwoWay}" 
-                    Margin="0 5"/>
+                    Text="{Binding ConfirmPassword, Mode=TwoWay}"
+                    Margin="0 5" />
 
                 <Button
                     Content="Change Password"
                     Command="{Binding ChangePasswordCommand}"
                     HorizontalAlignment="Center"
                     Margin="0 10"
-                    Padding="15 5"
-                    />
+                    Padding="15 5" />
 
                 <TextBlock Text="{Binding StatusMessage}"
                            Foreground="Red"
                            HorizontalAlignment="Center"
-                           Margin="0 10 0 0"/>
+                           Margin="0 10 0 0" />
             </StackPanel>
         </StackPanel>
     </Grid>

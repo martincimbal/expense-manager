@@ -124,9 +124,9 @@ public partial class TransactionListViewModel : ViewModelBase
 
         var editWindow = new EditTransactionWindow();
         var viewModel = new EditTransactionWindowViewModel(transaction, new ObservableCollection<Category>(categories))
-            {
-                CloseAction = () => editWindow.Close()
-            };
+        {
+            CloseAction = () => editWindow.Close()
+        };
 
         editWindow.DataContext = viewModel;
 

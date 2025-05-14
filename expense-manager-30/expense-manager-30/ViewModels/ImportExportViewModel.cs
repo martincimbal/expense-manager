@@ -59,7 +59,8 @@ public partial class ImportExportViewModel : ViewModelBase
         }
         catch (JsonException ex)
         {
-            StatusMessage = $"Error on line {ex.LineNumber}, more specifically: {ex.Message[..Math.Min(ex.Message.Length, 100)]}";
+            StatusMessage =
+                $"Error on line {ex.LineNumber}, more specifically: {ex.Message[..Math.Min(ex.Message.Length, 100)]}";
         }
     }
 

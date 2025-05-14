@@ -11,10 +11,6 @@
         Width="400"
         Height="450">
 
-    <Design.DataContext>
-        <vm:EditTransactionWindowViewModel />
-    </Design.DataContext>
-
     <StackPanel Margin="20"
                 Spacing="10">
 
@@ -39,21 +35,27 @@
 
         <TextBlock Text="{Binding StatusMessage}" Foreground="Red" />
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+        <Grid ColumnDefinitions="Auto,*">
             <Button Content="Delete"
-                    Margin="50"
                     Command="{Binding DeleteCommand}"
                     Background="IndianRed"
                     Foreground="White"
+                    Padding="15,5"
                     HorizontalAlignment="Left" />
 
-            <Button Content="Cancel"
-                    Command="{Binding CancelCommand}" />
-
-            <Button Content="Save"
-                    Command="{Binding SaveCommand}"
-                    Background="Green"
-                    Foreground="White"/>
-        </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Spacing="10">
+                    
+                    <Button Content="Cancel"
+                            Command="{Binding CancelCommand}" />
+                    
+                    <Button Content="Save"
+                            Command="{Binding SaveCommand}"
+                            Background="Green"
+                            Foreground="White" />
+            </StackPanel>
+        </Grid>
     </StackPanel>
 </Window>

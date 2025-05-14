@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using expense_manager_30.enums;
 using expense_manager_30.Services;
 
 namespace expense_manager_30.ViewModels;
@@ -11,6 +12,8 @@ namespace expense_manager_30.ViewModels;
 public partial class DashboardViewModel : ViewModelBase
 {
     private readonly DbService _database;
+
+    private readonly MainWindowViewModel _mainWindow;
 
     [ObservableProperty] private decimal _currentBalance;
 
@@ -22,8 +25,9 @@ public partial class DashboardViewModel : ViewModelBase
 
     [ObservableProperty] private int _totalTransactions;
 
-    public DashboardViewModel()
+    public DashboardViewModel(MainWindowViewModel mainWindow)
     {
+        _mainWindow = mainWindow;
         _database = new DbService();
 
         GoToTransactionsCommand = new RelayCommand(GoToTransactions);
@@ -31,6 +35,7 @@ public partial class DashboardViewModel : ViewModelBase
 
         LoadDashboardData();
     }
+
 
     public ICommand GoToTransactionsCommand { get; }
     public ICommand GoToStatisticsCommand { get; }
@@ -68,11 +73,11 @@ public partial class DashboardViewModel : ViewModelBase
 
     private void GoToTransactions()
     {
-        // Navigation logic
+        _mainWindow.CurrentPage = PageType.Transactions;
     }
 
     private void GoToStatistics()
     {
-        // Navigation logic
+        _mainWindow.CurrentPage = PageType.Statistics;
     }
 }

@@ -8,7 +8,7 @@
              x:DataType="vm:CategoriesViewModel">
 
     <StackPanel Margin="20"
-                Spacing="15" 
+                Spacing="15"
                 Width="300"
                 HorizontalAlignment="Center">
 
@@ -16,17 +16,17 @@
                    FontSize="22"
                    FontWeight="Bold"
                    HorizontalAlignment="Center"
-                   Margin="0,15"/>
+                   Margin="0,15" />
 
-        <TextBox 
+        <TextBox
             Watermark="Category name"
             Text="{Binding CategoryName, Mode=TwoWay}"
             FontSize="16"
             Padding="10"
             Height="40"
-            HorizontalAlignment="Stretch"/>
+            HorizontalAlignment="Stretch" />
 
-        <Button 
+        <Button
             Content="Add Category"
             Command="{Binding AddCategoryCommand}"
             HorizontalContentAlignment="Center"
@@ -35,7 +35,7 @@
             FontSize="16"
             Padding="10"
             Height="40"
-            HorizontalAlignment="Stretch"/>
+            HorizontalAlignment="Stretch" />
 
         <Separator />
 
@@ -43,17 +43,17 @@
                    FontSize="22"
                    FontWeight="Bold"
                    HorizontalAlignment="Center"
-                   Margin="0,15"/>
+                   Margin="0,15" />
 
-        <ComboBox 
+        <ComboBox
             ItemsSource="{Binding Categories}"
             SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
             FontSize="16"
             Padding="10"
             Height="40"
-            HorizontalAlignment="Stretch"/>
+            HorizontalAlignment="Stretch" />
 
-        <Button 
+        <Button
             Content="Delete Category"
             Command="{Binding DeleteCategoryCommand}"
             HorizontalContentAlignment="Center"
@@ -63,14 +63,14 @@
             Padding="10"
             Height="40"
             HorizontalAlignment="Stretch"
-            IsVisible="{Binding IsDeleteButtonVisible}"/>
+            IsVisible="{Binding IsDeleteButtonVisible}" />
 
-        <TextBlock 
+        <TextBlock
             Text="{Binding StatusMessage}"
             Foreground="Red"
             FontSize="14"
             TextWrapping="Wrap"
-            HorizontalAlignment="Left"/>
+            HorizontalAlignment="Left" />
 
     </StackPanel>
 </UserControl>

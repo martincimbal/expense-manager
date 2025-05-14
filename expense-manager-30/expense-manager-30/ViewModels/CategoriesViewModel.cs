@@ -9,15 +9,15 @@ namespace expense_manager_30.ViewModels;
 public partial class CategoriesViewModel : ViewModelBase
 {
     private readonly DbService _database = new();
-    
+
     [ObservableProperty] private ObservableCollection<Category> _categories = [];
-    
+
     [ObservableProperty] private string _categoryName = string.Empty;
-    
+
     [ObservableProperty] private bool _isDeleteButtonVisible;
-    
+
     [ObservableProperty] private Category? _selectedCategory;
-    
+
     [ObservableProperty] private string _statusMessage = string.Empty;
 
     public CategoriesViewModel()

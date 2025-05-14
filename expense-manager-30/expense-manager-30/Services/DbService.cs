@@ -346,7 +346,7 @@ public class DbService
 
         cmd.ExecuteNonQuery();
     }
-    
+
     public bool ChangePassword(int userId, string currentPassword, string newPassword)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
@@ -377,7 +377,7 @@ public class DbService
         updateCommand.ExecuteNonQuery();
         return true;
     }
-    
+
     public bool DeleteCategory(int categoryId)
     {
         using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
@@ -389,10 +389,7 @@ public class DbService
 
         var count = Convert.ToInt32(command.ExecuteScalar());
 
-        if (count > 0)
-        {
-            return false;
-        }
+        if (count > 0) return false;
 
         const string deleteCategoryQuery = "DELETE FROM Categories WHERE Id = @CategoryId";
         using var deleteCommand = new SQLiteCommand(deleteCategoryQuery, connection);
@@ -401,6 +398,4 @@ public class DbService
         deleteCommand.ExecuteNonQuery();
         return true;
     }
-
-
 }

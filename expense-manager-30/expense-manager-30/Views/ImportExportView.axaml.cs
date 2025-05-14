@@ -29,30 +29,27 @@ public partial class ImportExportView : UserControl
                 AllowMultiple = false
             });
 
-            if (files.Count > 0)
-            {
-                await vm.ImportFromFileAsync(files[0]);
-            }
+            if (files.Count > 0) await vm.ImportFromFileAsync(files[0]);
         }
         catch (IOException ioEx)
         {
             if (DataContext is not ImportExportViewModel vm)
                 return;
-            
+
             vm.StatusMessage = $"I/O Error: {ioEx.Message}";
         }
         catch (UnauthorizedAccessException authEx)
         {
             if (DataContext is not ImportExportViewModel vm)
                 return;
-            
+
             vm.StatusMessage = $"Access denied: {authEx.Message}";
         }
         catch (Exception ex)
         {
             if (DataContext is not ImportExportViewModel vm)
                 return;
-            
+
             vm.StatusMessage = $"Unexpected error: {ex.Message[..Math.Min(ex.Message.Length, 100)]}...";
         }
     }
@@ -72,30 +69,27 @@ public partial class ImportExportView : UserControl
                 SuggestedFileName = "export.json"
             });
 
-            if (file is not null)
-            {
-                await vm.ExportToFileAsync(file);
-            }
+            if (file is not null) await vm.ExportToFileAsync(file);
         }
         catch (IOException ioEx)
         {
             if (DataContext is not ImportExportViewModel vm)
                 return;
-            
+
             vm.StatusMessage = $"I/O Error: {ioEx.Message}";
         }
         catch (UnauthorizedAccessException authEx)
         {
             if (DataContext is not ImportExportViewModel vm)
                 return;
-            
+
             vm.StatusMessage = $"Access denied: {authEx.Message}";
         }
         catch (Exception ex)
         {
             if (DataContext is not ImportExportViewModel vm)
                 return;
-            
+
             vm.StatusMessage = $"Unexpected error: {ex.Message[..Math.Min(ex.Message.Length, 100)]}...";
         }
     }

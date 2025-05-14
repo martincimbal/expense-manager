@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using expense_manager_30.enums;
 
 namespace expense_manager_30.ViewModels;
 
@@ -6,26 +7,26 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     [ObservableProperty] private object? _currentPage;
 
-    [ObservableProperty] private int _selectedIndex;
+    [ObservableProperty] private PageType _selectedPage;
 
     public MainWindowViewModel()
     {
-        SelectedIndex = 0;
-        CurrentPage = new DashboardViewModel();
+        OnSelectedPageChanged(PageType.Dashboard);
     }
 
-    partial void OnSelectedIndexChanged(int value)
+    partial void OnSelectedPageChanged(PageType value)
     {
         CurrentPage = value switch
         {
-            0 => new DashboardViewModel(),
-            1 => new TransactionListViewModel(),
-            2 => new AddTransactionViewModel(),
-            3 => new CategoriesViewModel(),
-            4 => new StatisticsViewModel(),
-            5 => new ImportExportViewModel(),
-            6 => new AccountViewModel(),
+            PageType.Dashboard => new DashboardViewModel(this),
+            PageType.Transactions => new TransactionListViewModel(),
+            PageType.AddTransaction => new AddTransactionViewModel(),
+            PageType.Categories => new CategoriesViewModel(),
+            PageType.Statistics => new StatisticsViewModel(),
+            PageType.ImportExport => new ImportExportViewModel(),
+            PageType.Account => new AccountViewModel(),
             _ => CurrentPage
         };
     }
+
 }
