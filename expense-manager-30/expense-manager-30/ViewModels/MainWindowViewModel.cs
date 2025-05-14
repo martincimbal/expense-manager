@@ -22,9 +22,8 @@ public partial class MainWindowViewModel : ViewModelBase
             1 => new TransactionListViewModel(),
             2 => new AddTransactionViewModel(),
             3 => new AddCategoryViewModel(),
-            _ => new StatisticsViewModel()
-            // 3 => new CategoryManagementViewModel(),
-            // 4 => new ImportExportViewModel(),
+            4 => new StatisticsViewModel(),
+            5 => new ImportExportViewModel(),
             // 5 => new LogoutViewModel(),
             // _ => CurrentPage
         };

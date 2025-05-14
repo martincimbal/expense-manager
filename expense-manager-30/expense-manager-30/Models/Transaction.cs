@@ -4,7 +4,7 @@ namespace expense_manager_30.Models;
 
 public class Transaction
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
     public decimal Amount { get; set; }
     public bool IsIncome { get; set; }
     public DateTime Date { get; set; }
