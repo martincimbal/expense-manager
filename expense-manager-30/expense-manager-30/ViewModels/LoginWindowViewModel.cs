@@ -39,7 +39,7 @@ public partial class LoginWindowViewModel : ObservableObject
             {
                 Session.SetUser(userId.Value, Username);
                 LoginMessage = "Login successful.";
-                ReplaceWindow(new MainWindow());
+                WindowManagement.ReplaceWindow(new MainWindow());
             }
             else
             {
@@ -59,14 +59,5 @@ public partial class LoginWindowViewModel : ObservableObject
             DataContext = new RegisterWindowViewModel()
         };
         registerView.Show();
-    }
-
-    private static void ReplaceWindow(Window newWindow)
-    {
-        if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime lifetime)
-            return;
-        var currentWindow = lifetime.Windows.FirstOrDefault(w => w.IsActive);
-        newWindow.Show();
-        currentWindow?.Close();
     }
 }

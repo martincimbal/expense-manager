@@ -346,4 +346,36 @@ public class DbService
 
         cmd.ExecuteNonQuery();
     }
+    
+    public bool ChangePassword(int userId, string currentPassword, string newPassword)
+    {
+        using var connection = new SQLiteConnection($"Data Source={DbFilePath};");
+        connection.Open();
+
+        const string getQuery = "SELECT PasswordHash, Salt FROM Users WHERE Id = @Id";
+        using var getCommand = new SQLiteCommand(getQuery, connection);
+        getCommand.Parameters.AddWithValue("@Id", userId);
+
+        using var reader = getCommand.ExecuteReader();
+        if (!reader.Read()) return false;
+
+        var storedHash = reader.GetString(0);
+        var storedSalt = reader.GetString(1);
+        var currentHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(storedSalt + currentPassword)));
+
+        if (storedHash != currentHash)
+            return false;
+
+        var (newHash, newSalt) = HashPassword(newPassword);
+
+        const string updateQuery = "UPDATE Users SET PasswordHash = @Hash, Salt = @Salt WHERE Id = @Id";
+        using var updateCommand = new SQLiteCommand(updateQuery, connection);
+        updateCommand.Parameters.AddWithValue("@Hash", newHash);
+        updateCommand.Parameters.AddWithValue("@Salt", newSalt);
+        updateCommand.Parameters.AddWithValue("@Id", userId);
+
+        updateCommand.ExecuteNonQuery();
+        return true;
+    }
+
 }

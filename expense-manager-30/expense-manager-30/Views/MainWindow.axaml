@@ -27,7 +27,7 @@
                 <ListBoxItem>Categories</ListBoxItem>
                 <ListBoxItem>Statistics</ListBoxItem>
                 <ListBoxItem>Import/Export</ListBoxItem>
-                <ListBoxItem>Logout</ListBoxItem>
+                <ListBoxItem>Account</ListBoxItem>
             </ListBox>
         </SplitView.Pane>
 

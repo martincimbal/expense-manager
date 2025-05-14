@@ -44,6 +44,7 @@
                     Margin="50"
                     Command="{Binding DeleteCommand}"
                     Background="IndianRed"
+                    Foreground="White"
                     HorizontalAlignment="Left" />
 
             <Button Content="Cancel"
@@ -51,7 +52,8 @@
 
             <Button Content="Save"
                     Command="{Binding SaveCommand}"
-                    Background="Green" />
+                    Background="Green"
+                    Foreground="White"/>
         </StackPanel>
     </StackPanel>
 </Window>

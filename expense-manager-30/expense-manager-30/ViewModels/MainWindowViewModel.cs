@@ -24,8 +24,8 @@ public partial class MainWindowViewModel : ViewModelBase
             3 => new AddCategoryViewModel(),
             4 => new StatisticsViewModel(),
             5 => new ImportExportViewModel(),
-            // 5 => new LogoutViewModel(),
-            // _ => CurrentPage
+            6 => new AccountViewModel(),
+            _ => CurrentPage
         };
     }
 }
