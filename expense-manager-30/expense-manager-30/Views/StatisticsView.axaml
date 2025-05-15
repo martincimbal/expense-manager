@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:viewModels="clr-namespace:expense_manager_30.ViewModels"
+             xmlns:converters="clr-namespace:expense_manager_30.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="expense_manager_30.Views.StatisticsView"
+             x:DataType="viewModels:StatisticsViewModel">
+
+    <UserControl.Resources>
+        <converters:StringEqualityConverter x:Key="StringEqualityConverter" />
+    </UserControl.Resources>
+
+    <Design.DataContext>
+        <viewModels:StatisticsViewModel />
+    </Design.DataContext>
+
+    <ScrollViewer x:Name="MainScrollViewer">
+        <StackPanel Margin="20"
+                    Spacing="15">
+
+            <TextBlock Text="Transaction Statistics"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,15" />
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="10"
+                        Margin="0,0,0,20"
+                        HorizontalAlignment="Center">
+
+                <ComboBox ItemsSource="{Binding AvailableCharts}"
+                          SelectedItem="{Binding SelectedChart}"
+                          Width="200" />
+
+                <CheckBox Content="Show incomes"
+                          IsChecked="{Binding IsIncome, Mode=TwoWay}"
+                          IsVisible="{Binding ShowIncomeCheckBox}"
+                          VerticalAlignment="Center" />
+            </StackPanel>
+
+            <Border
+                IsVisible="{Binding SelectedChart, Converter={StaticResource StringEqualityConverter}, ConverterParameter='Categories'}">
+                <avalonia:PieChart
+                    Series="{Binding PieSeries}"
+                    Height="400"
+                    LegendPosition="Right" />
+            </Border>
+
+            <Border
+                IsVisible="{Binding SelectedChart, Converter={StaticResource StringEqualityConverter}, ConverterParameter='Monthly Totals'}">
+                <avalonia:CartesianChart
+                    Series="{Binding BarSeries}"
+                    Height="300"
+                    XAxes="{Binding BarXAxis}"
+                    YAxes="{Binding BarYAxis}" />
+            </Border>
+
+            <Border
+                IsVisible="{Binding SelectedChart, Converter={StaticResource StringEqualityConverter}, ConverterParameter='Balance'}">
+                <avalonia:CartesianChart
+                    Series="{Binding LineSeries}"
+                    Height="300"
+                    XAxes="{Binding LineXAxis}"
+                    YAxes="{Binding LineYAxis}" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
