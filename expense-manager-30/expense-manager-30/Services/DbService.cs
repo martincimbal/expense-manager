@@ -12,7 +12,7 @@ public class DbService
 {
     private const string DbFilePath = "expense_manager.db";
 
-    public DbService()
+    static DbService()
     {
         if (File.Exists(DbFilePath)) return;
         SQLiteConnection.CreateFile(DbFilePath);
