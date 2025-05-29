@@ -3,11 +3,11 @@ using expense_manager_30.ViewModels;
 
 namespace expense_manager_30.Views;
 
-public partial class MainWindow : Window
+public partial class LoginWindow : Window
 {
-    public MainWindow()
+    public LoginWindow()
     {
         InitializeComponent();
-        DataContext = new MainWindowViewModel();
+        DataContext = new LoginWindowViewModel();
     }
 }

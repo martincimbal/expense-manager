@@ -6,15 +6,36 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="expense_manager_30.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="expense_manager_30">
+        Icon="/Assets/accounting-logo.ico"
+        Width="1200"
+        Height="700"
+        Title="Expense Manager"
+        MinWidth="800"
+        MinHeight="500">
 
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <SplitView IsPaneOpen="True"
+               OpenPaneLength="220"
+               DisplayMode="Inline">
+
+        <SplitView.Pane>
+            <ListBox SelectedIndex="{Binding SelectedPage}">
+                <ListBoxItem>Dashboard</ListBoxItem>
+                <ListBoxItem>Transactions</ListBoxItem>
+                <ListBoxItem>Add Transaction</ListBoxItem>
+                <ListBoxItem>Categories</ListBoxItem>
+                <ListBoxItem>Statistics</ListBoxItem>
+                <ListBoxItem>Import/Export</ListBoxItem>
+                <ListBoxItem>Account</ListBoxItem>
+            </ListBox>
+        </SplitView.Pane>
+
+        <SplitView.Content>
+            <TransitioningContentControl Content="{Binding CurrentPage}" />
+        </SplitView.Content>
+    </SplitView>
 
 </Window>

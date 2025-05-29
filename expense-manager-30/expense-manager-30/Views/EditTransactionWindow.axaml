@@ -1,0 +1,65 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:expense_manager_30.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="expense_manager_30.Views.EditTransactionWindow"
+        x:DataType="vm:EditTransactionWindowViewModel"
+        Icon="/Assets/accounting-logo.ico"
+        Title="Edit Transaction"
+        Width="400"
+        Height="450"
+        MinWidth="250"
+        MinHeight="400">
+
+    <StackPanel Margin="20"
+                Spacing="10">
+
+        <TextBlock Text="Amount" />
+
+        <TextBox Text="{Binding Amount, Mode=TwoWay}" />
+
+        <TextBlock Text="Note" />
+
+        <TextBox Text="{Binding Note, Mode=TwoWay}" />
+
+        <TextBlock Text="Category" />
+
+        <ComboBox ItemsSource="{Binding Categories}"
+                  SelectedItem="{Binding SelectedCategory}" />
+
+        <TextBlock Text="Date" />
+
+        <DatePicker SelectedDate="{Binding Date, Mode=TwoWay}" />
+
+        <CheckBox IsChecked="{Binding IsIncome}" 
+                  Content="Is Income" />
+
+        <TextBlock Text="{Binding StatusMessage}" 
+                   Foreground="Coral" />
+
+        <Grid ColumnDefinitions="Auto,*">
+            <Button Content="Delete"
+                    Command="{Binding DeleteCommand}"
+                    Background="IndianRed"
+                    Foreground="White"
+                    Padding="15,5"
+                    HorizontalAlignment="Left" />
+
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Spacing="10">
+
+                <Button Content="Cancel"
+                        Command="{Binding CancelCommand}" />
+
+                <Button Content="Save"
+                        Command="{Binding SaveCommand}"
+                        Background="Green"
+                        Foreground="White" />
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</Window>
