@@ -64,4 +64,4 @@ The app will start as a desktop window using Avalonia.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE.md).
+This project is licensed under the [MIT License](LICENSE).
